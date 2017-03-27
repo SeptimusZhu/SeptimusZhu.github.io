@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hexo</title>
+  <title>Cien anos de soledad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:title" content="Cien anos de soledad">
+<meta property="og:url" content="http://septimuszhu.github.io/index.html">
+<meta property="og:site_name" content="Cien anos de soledad">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="Cien anos de soledad">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Cien anos de soledad" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -33,7 +33,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">Cien anos de soledad</a>
       </h1>
       
     </div>
@@ -53,7 +53,7 @@
         <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://septimuszhu.github.io"></form>
       </div>
     </div>
   </div>
@@ -71,23 +71,51 @@
   <div class="article-inner">
     
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/24/mesos-containerizer-tips/">mesos containerizer tips</a>
-    </h1>
-  
-
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="Mesos-Containerizer"><a href="#Mesos-Containerizer" class="headerlink" title="Mesos Containerizer"></a>Mesos Containerizer</h2><p>Mesos Containerizer是mesos agent的关键部件，提供容器化所需的服务。</p>
+<ul>
+<li>位于agent和容器之间</li>
+<li>启动、更新和销毁容器</li>
+<li>提供容器间的隔离</li>
+<li>上报容器状态</li>
+</ul>
+<blockquote>
+<p>当前mesos支持以多种方式提供容器服务：Docker Containerizer、Mesos Containerizer以及两者混合。Mesos Containerizer更加稳定。</p>
+</blockquote>
+<p>Mesos Containerizer主要包括以下三个组件：</p>
+<ul>
+<li>Launcher，负责启动和销毁容器进程</li>
+<li>Isolator，最主要的功能组件，通过cgroup、namespace实现容器间资源隔离</li>
+<li>Provisioner，提供容器镜像支持</li>
+</ul>
+<p>容器启动的主要步骤如下：</p>
+<ol>
+<li><p>Isolator准备</p>
+<p>包含创建cgroup目录和初始化cgroup subsystem相关参数等操作。举一个cgroup subsystem为memory的例子，经过<code>CgroupsIsolatorProcess::prepare</code>的调用过程后，新生成了如下cgroup目录，并设置相关初始化参数</p>
+<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_mem.PNG?raw=true" alt=""></p>
+</li>
+<li><p>通过Launcher启动容器进程</p>
+<p>Launcher的具体实现<code>LinuxLauncher</code>通过libprocess的actor模型调用<code>LinuxLauncherProcess::fork</code>创建容器子进程。主要包括创建subsystem为freezer的cgroup，并将子进程pid放入其中，如下图所示：</p>
+<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_freezer.PNG?raw=true" alt=""></p>
+<p>放入freezer cgroup的进程会暂停，直到隔离和fetch完成后，在exec时通过信号将子进程唤醒。</p>
+</li>
+<li><p>隔离容器进程</p>
+<p>Isolator的具体实现有很多，主要包括cgroup、network cni等资源隔离接口，其中cgroup的隔离的过程就是将进程pid放入对应的cgroup中。具体实现在<code>CgroupsIsolatorProcess::isolate</code></p>
+<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_mem_isolate.PNG?raw=true" alt=""></p>
+</li>
+<li><p>fetch容器资源</p>
+<p>fetch是一种在容器任务准备时将容器资源下载到沙箱目录的机制，为后续的exec过程做准备。</p>
+</li>
+<li><p>执行容器进程</p>
+<p>之前fork出来的容器子进程被唤醒。</p>
+</li>
+</ol>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/03/24/mesos-containerizer-tips/" data-id="cj0mmp2zj0000cv893v1rn9n6" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/" data-id="cj0s87p1w0001hj89durhdy56" class="article-share-link">Share</a>
       
       
     </footer>
@@ -132,7 +160,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/03/24/hello-world/" data-id="cj0mmp2zp0001cv89mztvtzvj" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/24/hello-world/" data-id="cj0s87p1r0000hj89f9fbnyny" class="article-share-link">Share</a>
       
       
     </footer>
@@ -172,7 +200,7 @@
       <ul>
         
           <li>
-            <a href="/2017/03/24/mesos-containerizer-tips/">mesos containerizer tips</a>
+            <a href="/2017/03/24/mesos-containerizer-tips/">(no title)</a>
           </li>
         
           <li>
@@ -191,7 +219,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2017 John Doe<br>
+      &copy; 2017 Zhu Guodong<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
