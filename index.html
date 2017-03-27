@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://septimuszhu.github.io"></form>
@@ -91,17 +91,13 @@
 <ol>
 <li><p>Isolator准备</p>
 <p>包含创建cgroup目录和初始化cgroup subsystem相关参数等操作。举一个cgroup subsystem为memory的例子，经过<code>CgroupsIsolatorProcess::prepare</code>的调用过程后，新生成了如下cgroup目录，并设置相关初始化参数</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_mem.PNG?raw=true" alt=""></p>
-</li>
+<p align="left"><br><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_mem.PNG?raw=true" alt=""><br></p></li>
 <li><p>通过Launcher启动容器进程</p>
-<p>Launcher的具体实现<code>LinuxLauncher</code>通过libprocess的actor模型调用<code>LinuxLauncherProcess::fork</code>创建容器子进程。主要包括创建subsystem为freezer的cgroup，并将子进程pid放入其中，如下图所示：</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_freezer.PNG?raw=true" alt=""></p>
-<p>放入freezer cgroup的进程会暂停，直到隔离和fetch完成后，在exec时通过信号将子进程唤醒。</p>
+<p>Launcher的具体实现<code>LinuxLauncher</code>通过libprocess的actor模型调用<code>LinuxLauncherProcess::fork</code>创建容器子进程。主要包括创建subsystem为freezer的cgroup，并将子进程pid放入其中，如下图所示：<br></p><p align="left"><br><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_freezer.PNG?raw=true" alt=""><br></p><br>放入freezer cgroup的进程会暂停，直到隔离和fetch完成后，在exec时通过信号将子进程唤醒。<p></p>
 </li>
 <li><p>隔离容器进程</p>
 <p>Isolator的具体实现有很多，主要包括cgroup、network cni等资源隔离接口，其中cgroup的隔离的过程就是将进程pid放入对应的cgroup中。具体实现在<code>CgroupsIsolatorProcess::isolate</code></p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_mem_isolate.PNG?raw=true" alt=""></p>
-</li>
+<p align="left"><br><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_mem_isolate.PNG?raw=true" alt=""><br></p></li>
 <li><p>fetch容器资源</p>
 <p>fetch是一种在容器任务准备时将容器资源下载到沙箱目录的机制，为后续的exec过程做准备。</p>
 </li>
@@ -113,7 +109,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/" data-id="cj0s8aw250000ig89do2taeel" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/" data-id="cj0s8h9di0000k389bc47xa2z" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -158,7 +154,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/24/hello-world/" data-id="cj0s8aw2i0001ig89yc42sjdj" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/24/hello-world/" data-id="cj0s8h9dq0001k389dxj682kg" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -193,7 +189,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
@@ -218,7 +214,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 Zhu Guodong<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
