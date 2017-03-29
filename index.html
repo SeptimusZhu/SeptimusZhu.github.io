@@ -52,9 +52,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://septimuszhu.github.io"></form>
@@ -79,7 +79,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/29/libprocess-tips/">Libprocess concepts and tips</a>
+      <a class="article-title" href="/2017/03/29/libprocess-tips/">Libprocess concepts</a>
     </h1>
   
 
@@ -91,7 +91,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Library that provides an actor style message-passing programming model (in C++).</div></pre></td></tr></table></figure>
 <p>mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onAny等回调注册接口，以及then串接异步调用等等强大功能。</p>
 <h4 id="future／promise-概念"><a href="#future／promise-概念" class="headerlink" title="future／promise 概念"></a>future／promise 概念</h4><p>先看cplusplus.com官方定义：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1. A future is an object that can retrieve a value from some provider object or function, properly synchronizing this access if in different threads.</div><div class="line">2. A promise is an object that can store a value of type T to be retreieved by a future object (possibly in another thread), offering a synchronization point.</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1. A future is an object that can retrieve a value from some provider object or function, </div><div class="line">properly synchronizing this access if in different threads.</div><div class="line">2. A promise is an object that can store a value of type T to be retreieved by a future </div><div class="line">object (possibly in another thread), offering a synchronization point.</div></pre></td></tr></table></figure>
 <p>libprocess中实现了一套类似的future／promise（类比std::future／std::promise），其思想与c++很类似，future读，promise写，消费者持有future，生产者持有promise，在命名上别有意趣。</p>
 <h4 id="callback"><a href="#callback" class="headerlink" title="callback"></a>callback</h4><p>Future对象在函数返回值和入参间传递，存在多个消费者持有Future对象的多份拷贝的情况，因此Future使用一个共享指针成员维护唯一一份Data，在Data中记录Future状态和一系列callback，这些callback由onXXX接口注册，当生产者调用Promise的set等接口改变Future状态时将调用对应的callback。then也应用了callback机制。</p>
 <h4 id="then"><a href="#then" class="headerlink" title="then"></a>then</h4><p>先看示例代码：</p>
@@ -102,7 +102,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/29/libprocess-tips/" data-id="cj0v8i5q20000l189lzz96pjz" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/29/libprocess-tips/" data-id="cj0v8mowm0000ow89kx6ykegd" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -170,7 +170,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/" data-id="cj0v8i5r30002l189hn6wb2va" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/" data-id="cj0v8mows0001ow89ui6cpyqk" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -215,7 +215,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/24/hello-world/" data-id="cj0v8i5qp0001l1895og07q8n" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/24/hello-world/" data-id="cj0v8mox90002ow89ev5cvbtb" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -250,12 +250,12 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/2017/03/29/libprocess-tips/">Libprocess concepts and tips</a>
+            <a href="/2017/03/29/libprocess-tips/">Libprocess concepts</a>
           </li>
         
           <li>
@@ -279,7 +279,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 Zhu Guodong<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
