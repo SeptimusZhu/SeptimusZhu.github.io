@@ -5,12 +5,22 @@
   
   <title>Cien anos de soledad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="Libprocess concepts and tips先看官方定义：
+1Library that provides an actor style message-passing programming model (in C++).
+mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onA">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Cien anos de soledad">
-<meta property="og:url" content="http://septimuszhu.github.io/index.html">
+<meta property="og:url" content="http://septimuszhu.github.io/2017/03/29/libprocess-tips/index.html">
 <meta property="og:site_name" content="Cien anos de soledad">
+<meta property="og:description" content="Libprocess concepts and tips先看官方定义：
+1Library that provides an actor style message-passing programming model (in C++).
+mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onA">
+<meta property="og:updated_time" content="2017-03-29T17:15:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cien anos de soledad">
+<meta name="twitter:description" content="Libprocess concepts and tips先看官方定义：
+1Library that provides an actor style message-passing programming model (in C++).
+mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onA">
   
     <link rel="alternate" href="/atom.xml" title="Cien anos de soledad" type="application/atom+xml">
   
@@ -63,9 +73,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-libprocess-tips" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-libprocess-tips" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/03/29/libprocess-tips/" class="article-date">
   <time datetime="2017-03-29T15:21:51.000Z" itemprop="datePublished">2017-03-29</time>
@@ -98,123 +106,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-mesos-containerizer-tips" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/03/24/mesos-containerizer-tips/" class="article-date">
-  <time datetime="2017-03-23T16:44:06.000Z" itemprop="datePublished">2017-03-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/24/mesos-containerizer-tips/">Mesos Containerizer</a>
-    </h1>
+    <a href="/2017/03/24/mesos-containerizer-tips/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">Mesos Containerizer</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Mesos Containerizer是mesos agent的关键部件，提供容器化所需的服务。</p>
-<ul>
-<li>位于agent和容器之间</li>
-<li>启动、更新和销毁容器</li>
-<li>提供容器间的隔离</li>
-<li>上报容器状态</li>
-</ul>
-<p>当前mesos支持以多种方式提供容器服务：Docker Containerizer、Mesos Containerizer以及两者混合。Mesos Containerizer更加稳定。</p>
-<p>Mesos Containerizer主要包括以下三个组件：</p>
-<ul>
-<li>Launcher，负责启动和销毁容器进程</li>
-<li>Isolator，最主要的功能组件，通过cgroup、namespace实现容器间资源隔离</li>
-<li>Provisioner，提供容器镜像支持</li>
-</ul>
-<p>容器启动的主要步骤如下：</p>
-<ol>
-<li><p>Isolator准备</p>
-<p>包含创建cgroup目录和初始化cgroup subsystem相关参数等操作。举一个cgroup subsystem为memory的例子，经过<code>CgroupsIsolatorProcess::prepare</code>的调用过程后，新生成了如下cgroup目录，并设置相关初始化参数</p>
-<p align="left"><br><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_mem.PNG?raw=true" alt=""><br></p></li>
-<li><p>通过Launcher启动容器进程</p>
-<p>Launcher的具体实现<code>LinuxLauncher</code>通过libprocess的actor模型调用<code>LinuxLauncherProcess::fork</code>创建容器子进程。主要包括创建subsystem为freezer的cgroup，并将子进程pid放入其中，如下图所示：<br></p><p align="left"><br><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_freezer.PNG?raw=true" alt=""><br></p><br>放入freezer cgroup的进程会暂停，直到隔离和fetch完成后，在exec时通过信号将子进程唤醒。<p></p>
-</li>
-<li><p>隔离容器进程</p>
-<p>Isolator的具体实现有很多，主要包括cgroup、network cni等资源隔离接口，其中cgroup的隔离的过程就是将进程pid放入对应的cgroup中。具体实现在<code>CgroupsIsolatorProcess::isolate</code></p>
-<p align="left"><br><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_mem_isolate.PNG?raw=true" alt=""><br></p></li>
-<li><p>fetch容器资源</p>
-<p>fetch是一种在容器任务准备时将容器资源下载到沙箱目录的机制，为后续的exec过程做准备。</p>
-</li>
-<li><p>执行容器进程</p>
-<p>之前fork出来的容器子进程被唤醒。</p>
-</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/" data-id="cj0v8fph30002jr897o1s0ouu" class="article-share-link">Partager</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/03/24/hello-world/" class="article-date">
-  <time datetime="2017-03-23T16:04:27.000Z" itemprop="datePublished">2017-03-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/24/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/24/hello-world/" data-id="cj0v8fpgq0000jr89lw3rfwih" class="article-share-link">Partager</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 </section>
         
