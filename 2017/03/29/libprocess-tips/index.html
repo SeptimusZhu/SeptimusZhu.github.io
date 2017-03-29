@@ -3,24 +3,24 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Cien anos de soledad</title>
+  <title>Libprocess concepts and tips | Cien anos de soledad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Libprocess concepts and tips先看官方定义：
+  <meta name="description" content="先看官方定义：
 1Library that provides an actor style message-passing programming model (in C++).
-mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onA">
+mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onAny等回调注册接口，以及then串接异步调用等等强大功能。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Cien anos de soledad">
+<meta property="og:title" content="Libprocess concepts and tips">
 <meta property="og:url" content="http://septimuszhu.github.io/2017/03/29/libprocess-tips/index.html">
 <meta property="og:site_name" content="Cien anos de soledad">
-<meta property="og:description" content="Libprocess concepts and tips先看官方定义：
+<meta property="og:description" content="先看官方定义：
 1Library that provides an actor style message-passing programming model (in C++).
-mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onA">
-<meta property="og:updated_time" content="2017-03-29T17:15:27.000Z">
+mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onAny等回调注册接口，以及then串接异步调用等等强大功能。">
+<meta property="og:updated_time" content="2017-03-29T17:17:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cien anos de soledad">
-<meta name="twitter:description" content="Libprocess concepts and tips先看官方定义：
+<meta name="twitter:title" content="Libprocess concepts and tips">
+<meta name="twitter:description" content="先看官方定义：
 1Library that provides an actor style message-passing programming model (in C++).
-mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onA">
+mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onAny等回调注册接口，以及then串接异步调用等等强大功能。">
   
     <link rel="alternate" href="/atom.xml" title="Cien anos de soledad" type="application/atom+xml">
   
@@ -62,9 +62,9 @@ mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的�
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://septimuszhu.github.io"></form>
@@ -83,10 +83,19 @@ mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的�
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Libprocess concepts and tips
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<h2 id="Libprocess-concepts-and-tips"><a href="#Libprocess-concepts-and-tips" class="headerlink" title="Libprocess concepts and tips"></a>Libprocess concepts and tips</h2><p>先看官方定义：</p>
+        <p>先看官方定义：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Library that provides an actor style message-passing programming model (in C++).</div></pre></td></tr></table></figure>
 <p>mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onAny等回调注册接口，以及then串接异步调用等等强大功能。</p>
 <h4 id="future／promise-概念"><a href="#future／promise-概念" class="headerlink" title="future／promise 概念"></a>future／promise 概念</h4><p>先看cplusplus.com官方定义：</p>
@@ -97,10 +106,11 @@ mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的�
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Future&lt;string&gt; S = readyFuture()</div><div class="line">  .then(lambda::bind(&amp;second, lambda::_1))</div><div class="line">  .then(lambda::bind(&amp;third, lambda::_1));</div><div class="line"></div><div class="line">string s = S.get();</div></pre></td></tr></table></figure>
 <p>等同于：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Future&lt;bool&gt; A = oneFuture();</div><div class="line">Future&lt;int&gt; B = second(A.get());</div><div class="line">Future&lt;string&gt; S = third(B.get());</div><div class="line"></div><div class="line">string s = S.get();</div></pre></td></tr></table></figure>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/29/libprocess-tips/" data-id="cj0v8fpgz0001jr89vjrnqemo" class="article-share-link">Partager</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/29/libprocess-tips/" data-id="cj0v8i5q20000l189lzz96pjz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -111,7 +121,7 @@ mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的�
   
   
     <a href="/2017/03/24/mesos-containerizer-tips/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Ancien</strong>
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">Mesos Containerizer</div>
     </a>
   
@@ -144,12 +154,12 @@ mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的�
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/2017/03/29/libprocess-tips/">(no title)</a>
+            <a href="/2017/03/29/libprocess-tips/">Libprocess concepts and tips</a>
           </li>
         
           <li>
@@ -173,7 +183,7 @@ mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的�
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 Zhu Guodong<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
