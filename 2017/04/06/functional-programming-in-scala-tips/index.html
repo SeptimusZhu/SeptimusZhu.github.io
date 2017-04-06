@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Cien anos de soledad</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="tips in update everyday(maybe weekly)
+
+partial application
+  123456789def compose[A,B,C](f: B =&amp;gt; C, g: A =&amp;gt; B): A =&amp;gt; C = &amp;#123;    (a: A) =&amp;gt; f(g(a))&amp;#125;def curry[A,B,C](f: (A, B) =&amp;gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cien anos de soledad">
+<meta property="og:url" content="http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/index.html">
+<meta property="og:site_name" content="Cien anos de soledad">
+<meta property="og:description" content="tips in update everyday(maybe weekly)
+
+partial application
+  123456789def compose[A,B,C](f: B =&amp;gt; C, g: A =&amp;gt; B): A =&amp;gt; C = &amp;#123;    (a: A) =&amp;gt; f(g(a))&amp;#125;def curry[A,B,C](f: (A, B) =&amp;gt;">
+<meta property="og:updated_time" content="2017-04-06T15:20:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cien anos de soledad">
+<meta name="twitter:description" content="tips in update everyday(maybe weekly)
+
+partial application
+  123456789def compose[A,B,C](f: B =&amp;gt; C, g: A =&amp;gt; B): A =&amp;gt; C = &amp;#123;    (a: A) =&amp;gt; f(g(a))&amp;#125;def curry[A,B,C](f: (A, B) =&amp;gt;">
+  
+    <link rel="alternate" href="/atom.xml" title="Cien anos de soledad" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Cien anos de soledad</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">code trips and tips</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://septimuszhu.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-functional-programming-in-scala-tips" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/06/functional-programming-in-scala-tips/" class="article-date">
+  <time datetime="2017-04-06T15:13:41.000Z" itemprop="datePublished">2017-04-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h2 id="tips-in"><a href="#tips-in" class="headerlink" title="tips in "></a>tips in <functional programming="" in="" scala=""></functional></h2><p><del>update everyday</del>(maybe weekly)</p>
+<ul>
+<li><p>partial application</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">compose</span></span>[<span class="type">A</span>,<span class="type">B</span>,<span class="type">C</span>](f: <span class="type">B</span> =&gt; <span class="type">C</span>, g: <span class="type">A</span> =&gt; <span class="type">B</span>): <span class="type">A</span> =&gt; <span class="type">C</span> = &#123;</div><div class="line">    (a: <span class="type">A</span>) =&gt; f(g(a))</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">curry</span></span>[<span class="type">A</span>,<span class="type">B</span>,<span class="type">C</span>](f: (<span class="type">A</span>, <span class="type">B</span>) =&gt; <span class="type">C</span>): <span class="type">A</span> =&gt; (<span class="type">B</span> =&gt; <span class="type">C</span>) = &#123;</div><div class="line">    (a: <span class="type">A</span>) =&gt; ((b: <span class="type">B</span>) =&gt; f(a, b))</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">uncurry</span></span>[<span class="type">A</span>,<span class="type">B</span>,<span class="type">C</span>](f: <span class="type">A</span> =&gt; <span class="type">B</span> =&gt; <span class="type">C</span>): (<span class="type">A</span>, <span class="type">B</span>) =&gt; <span class="type">C</span> = &#123;</div><div class="line">    (a: <span class="type">A</span>, b: <span class="type">B</span>) =&gt; f(a)(b)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/" data-id="cj16jue870000fq89t60yjjns" class="article-share-link">Delen</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/03/29/libprocess-tips/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Libprocess concepts</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archieven</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recente berichten</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/06/functional-programming-in-scala-tips/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/29/libprocess-tips/">Libprocess concepts</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/24/mesos-containerizer-tips/">Mesos Containerizer</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/24/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Zhu Guodong<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
