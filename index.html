@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://septimuszhu.github.io"></form>
@@ -75,10 +75,19 @@
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/06/functional-programming-in-scala-tips/">tips in &lt;Functional Programming in Scala&gt;</a>
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<h2 id="tips-in"><a href="#tips-in" class="headerlink" title="tips in "></a>tips in <functional programming="" in="" scala=""></functional></h2><p><del>update everyday</del>(maybe weekly)</p>
+        <p><del>update everyday</del>(maybe weekly)</p>
 <ul>
 <li><p>partial application</p>
   <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">compose</span></span>[<span class="type">A</span>,<span class="type">B</span>,<span class="type">C</span>](f: <span class="type">B</span> =&gt; <span class="type">C</span>, g: <span class="type">A</span> =&gt; <span class="type">B</span>): <span class="type">A</span> =&gt; <span class="type">C</span> = &#123;</div><div class="line">    (a: <span class="type">A</span>) =&gt; f(g(a))</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">curry</span></span>[<span class="type">A</span>,<span class="type">B</span>,<span class="type">C</span>](f: (<span class="type">A</span>, <span class="type">B</span>) =&gt; <span class="type">C</span>): <span class="type">A</span> =&gt; (<span class="type">B</span> =&gt; <span class="type">C</span>) = &#123;</div><div class="line">    (a: <span class="type">A</span>) =&gt; ((b: <span class="type">B</span>) =&gt; f(a, b))</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">uncurry</span></span>[<span class="type">A</span>,<span class="type">B</span>,<span class="type">C</span>](f: <span class="type">A</span> =&gt; <span class="type">B</span> =&gt; <span class="type">C</span>): (<span class="type">A</span>, <span class="type">B</span>) =&gt; <span class="type">C</span> = &#123;</div><div class="line">    (a: <span class="type">A</span>, b: <span class="type">B</span>) =&gt; f(a)(b)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -88,7 +97,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/" data-id="cj16jue870000fq89t60yjjns" class="article-share-link">Delen</a>
+      <a data-url="http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/" data-id="cj16jwg690000gq89t8x1fg1n" class="article-share-link">Share</a>
       
       
     </footer>
@@ -135,7 +144,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/29/libprocess-tips/" data-id="cj16jue8g0002fq892so8g38w" class="article-share-link">Delen</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/29/libprocess-tips/" data-id="cj16jwg6l0002gq89xhj704tf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -203,7 +212,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/" data-id="cj16jue8y0003fq89f68ptlk7" class="article-share-link">Delen</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/" data-id="cj16jwg6o0003gq894tsflso4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -248,7 +257,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/24/hello-world/" data-id="cj16jue8d0001fq89fldgvuft" class="article-share-link">Delen</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/24/hello-world/" data-id="cj16jwg6h0001gq897iz6i1nw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -273,7 +282,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archieven</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
     </div>
@@ -283,12 +292,12 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recente berichten</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/2017/04/06/functional-programming-in-scala-tips/">(no title)</a>
+            <a href="/2017/04/06/functional-programming-in-scala-tips/">tips in &lt;Functional Programming in Scala&gt;</a>
           </li>
         
           <li>
