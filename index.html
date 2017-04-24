@@ -65,6 +65,98 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-get-started-with-flink-on-top-of-mesos-marathon" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/" class="article-date">
+  <time datetime="2017-04-24T14:57:11.000Z" itemprop="datePublished">2017-04-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/">Get Started with Flink on top of Mesos Marathon</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Based on CentOS 7</p>
+<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><h4 id="rpm安装包准备"><a href="#rpm安装包准备" class="headerlink" title="rpm安装包准备"></a>rpm安装包准备</h4><p><a href="http://dl.marmotte.net/rpms/redhat/el7/x86_64/zookeeper-3.4.9-3.el7/zookeeper-3.4.9-3.el7.noarch.rpm" target="_blank" rel="external">zookeeper</a></p>
+<p><a href="http://repos.mesosphere.com/el/7/x86_64/RPMS/mesos-1.1.0-2.0.107.centos701406.x86_64.rpm" target="_blank" rel="external">mesos</a></p>
+<p><a href="http://repos.mesosphere.com/el-testing/6/x86_64/RPMS/marathon-1.4.0-1.0.560.el6.x86_64.rpm" target="_blank" rel="external">marathon</a></p>
+<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>三台机器的集群，网络互通，关闭防火墙和SELinux</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl stop firewalld &amp;&amp; setenforce 0</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">节点</th>
+<th style="text-align:center">IP</th>
+<th style="text-align:center">部署服务</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">10.120.177.85</td>
+<td style="text-align:center">zookeeper、mesos-master、mesos-slave、marathon</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">10.120.181.94</td>
+<td style="text-align:center">zookeeper、mesos-master、mesos-slave、marathon</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">10.120.180.209</td>
+<td style="text-align:center">zookeeper、mesos-master、mesos-slave、marathon</td>
+</tr>
+</tbody>
+</table>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>node1、node2、node3:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">rpm -ivh zookeeper*.rpm</div><div class="line">yum install libevent libevent-devel -y</div><div class="line">rpm -ivh mesos*.rpm</div><div class="line">rpm -ivh marathon*.rpm</div></pre></td></tr></table></figure>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="zookeeper配置"><a href="#zookeeper配置" class="headerlink" title="zookeeper配置"></a>zookeeper配置</h4><p>node1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo 1 &gt; /var/lib/zookeeper/myid</div></pre></td></tr></table></figure>
+<p>node2:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo 2 &gt; /var/lib/zookeeper/myid</div></pre></td></tr></table></figure>
+<p>node3:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo 3 &gt; /var/lib/zookeeper/myid</div></pre></td></tr></table></figure>
+<p>node1、node2、node3配置<code>/etc/zookeeper/zoo.cfg</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">server.1=10.120.177.85:2888:3888</div><div class="line">server.2=10.120.181.94:2888:3888</div><div class="line">server.3=10.120.180.209:2888:3888</div></pre></td></tr></table></figure>
+<h4 id="mesos配置"><a href="#mesos配置" class="headerlink" title="mesos配置"></a>mesos配置</h4><p>node1、node2、node3配置<code>/etc/mesos/zk</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zk://10.120.177.85:2181,10.120.181.94:2181,10.120.180.209:2181/mesos</div></pre></td></tr></table></figure>
+<p>node1、node2、node3:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#集群中节点数为3</div><div class="line">echo 2 &gt; /etc/mesos-master/quorum</div></pre></td></tr></table></figure>
+<h4 id="marathon配置"><a href="#marathon配置" class="headerlink" title="marathon配置"></a>marathon配置</h4><p>node1、node2、node3:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#用于生成marathon.jar</div><div class="line">marathon</div></pre></td></tr></table></figure>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>node1、node2、node3:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">systemctl restart zookeeper</div><div class="line">systemctl restart mesos-master</div><div class="line">systemctl restart mesos-slave</div><div class="line">marathon run_jar --master zk://10.120.177.85:2181,10.120.181.94:2181,10.120.180.209:2181/mesos --zk zk://10.120.177.85:2181,10.120.181.94:2181,10.120.180.209:2181/marathon</div></pre></td></tr></table></figure>
+<p>可通过三个节点IP访问mesos webUI和marathon webUI，会重定向到zk选举出来的Master节点，以10.120.181.94为例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mesos webUI address: 10.120.181.94:5050</div><div class="line">marathon webUI address: 10.120.181.94:8080</div></pre></td></tr></table></figure>
+<h4 id="部署Flink"><a href="#部署Flink" class="headerlink" title="部署Flink"></a>部署Flink</h4><p>编写json格式的marathon应用描述文件flink-example.json:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"id"</span>: <span class="string">"flink"</span>,</div><div class="line">  <span class="attr">"cmd"</span>: <span class="string">"/home/flink-1.2.0/bin/mesos-appmaster.sh -Dmesos.master=zk://10.120.177.85:2181,10.120.181.94:2181,10.120.180.209:2181/mesos -Dmesos.initial-tasks=3 -Dmesos.resourcemanager.tasks.cpus=1.0 -Dmesos.resourcemanager.tasks.mem=1024"</span>,</div><div class="line">  <span class="attr">"cpus"</span>: <span class="number">1</span>,</div><div class="line">  <span class="attr">"mem"</span>: <span class="number">1024</span>,</div><div class="line">  <span class="attr">"disk"</span>: <span class="number">2048</span>,</div><div class="line">  <span class="attr">"instances"</span>: <span class="number">1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过Marathon WebUI提交或者使用curl命令提交:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X POST http://10.120.181.94:8080/v2/apps -d @flink-example.json -H &quot;Content-type: application/json&quot;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://septimuszhu.github.io/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/" data-id="cj1w90mzu00025n89q24o640n" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-deploy-flink-on-mesos-marathon" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/04/12/deploy-flink-on-mesos-marathon/" class="article-date">
@@ -183,7 +275,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/04/12/deploy-flink-on-mesos-marathon/" data-id="cj1s0m1nw00000r890r1wswxp" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/04/12/deploy-flink-on-mesos-marathon/" data-id="cj1w90mzl00005n89dwwedpaf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -225,7 +317,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/" data-id="cj1s0m1oj00020r892jmn3jgc" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/" data-id="cj1w90mzr00015n89i75jz24d" class="article-share-link">Share</a>
       
       
     </footer>
@@ -272,7 +364,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/29/libprocess-tips/" data-id="cj1s0m1oh00010r896fqqyrep" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/29/libprocess-tips/" data-id="cj1w90n0e00045n89i66dq58t" class="article-share-link">Share</a>
       
       
     </footer>
@@ -340,7 +432,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/" data-id="cj1s0m1om00040r89erka7x7a" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/" data-id="cj1w90n0e00055n898y7d3bwk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -385,7 +477,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/24/hello-world/" data-id="cj1s0m1ol00030r89ozasa1ef" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/24/hello-world/" data-id="cj1w90n0d00035n895of1kg0i" class="article-share-link">Share</a>
       
       
     </footer>
@@ -425,6 +517,10 @@
       <ul>
         
           <li>
+            <a href="/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/">Get Started with Flink on top of Mesos Marathon</a>
+          </li>
+        
+          <li>
             <a href="/2017/04/12/deploy-flink-on-mesos-marathon/">deploy flink on mesos marathon</a>
           </li>
         
@@ -438,10 +534,6 @@
         
           <li>
             <a href="/2017/03/24/mesos-containerizer-tips/">Mesos Containerizer</a>
-          </li>
-        
-          <li>
-            <a href="/2017/03/24/hello-world/">Hello World</a>
           </li>
         
       </ul>
