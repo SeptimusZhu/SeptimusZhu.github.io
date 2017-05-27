@@ -65,6 +65,58 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-mesos-net-cls-test" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/27/mesos-net-cls-test/" class="article-date">
+  <time datetime="2017-05-27T03:38:04.000Z" itemprop="datePublished">2017-05-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/27/mesos-net-cls-test/">mesos net_cls test</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-mesos启动参数配置"><a href="#1-mesos启动参数配置" class="headerlink" title="1.mesos启动参数配置"></a>1.mesos启动参数配置</h4><p>slave启动参数配置，增加net_cls</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo cgroups/cpu,cgroups/mem,cgroups/net_cls &gt; /etc/mesos-slave/isolation</div></pre></td></tr></table></figure>
+<p>增加mesos-slave启动参数<code>--cgroups_net_cls_primary_handle=0x0001</code>，可以通过修改<code>/usr/bin/mesos-init-wrapper</code>脚本实现，最终mesos-slave启动参数如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/sbin/mesos-slave --master=zk://10.120.177.85:2181,10.120.181.94:2181,10.120.180.209:2181/mesos --log_dir=/var/log/mesos --cgroups_net_cls_primary_handle=0x0001 --containerizers=mesos --isolation=cgroups/cpu,cgroups/mem,cgroups/net_cls --work_dir=/var/lib/meso</div></pre></td></tr></table></figure>
+<p>此时mesos会为每个容器分配一个16位的cgroups_net_cls_secondary_handle，和cgroups_net_cls_primary_handle(0x0001)一起组成一个classid。</p>
+<h4 id="2-启动应用"><a href="#2-启动应用" class="headerlink" title="2. 启动应用"></a>2. 启动应用</h4><p>使用marathon提交nc命令行应用，向对端发数据：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"id"</span>: <span class="string">"/basic-023"</span>,</div><div class="line">  <span class="attr">"cmd"</span>: <span class="string">"yes ssssssssssssssssssssss|nc 10.162.174.188 5567"</span>,</div><div class="line">  <span class="attr">"cpus"</span>: <span class="number">1</span>,</div><div class="line">  <span class="attr">"mem"</span>: <span class="number">10</span>,</div><div class="line">  <span class="attr">"disk"</span>: <span class="number">0</span>,</div><div class="line">  <span class="attr">"instances"</span>: <span class="number">1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用<code>nethogs</code>工具查看进程流量：</p>
+<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pic/rmp_net_cls_before.png?raw=true" alt=""></p>
+<h4 id="3-启用流控规则"><a href="#3-启用流控规则" class="headerlink" title="3. 启用流控规则"></a>3. 启用流控规则</h4><p>查看容器进程的classid：</p>
+<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pic/rmp_net_cls_classid.png?raw=true" alt=""></p>
+<p>65538 = 0x00010002</p>
+<p>使用tc工具配置规则：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tc qdisc del dev eth0 root</div><div class="line">tc qdisc add dev eth0 root handle 1: htb</div><div class="line">tc class add dev eth0 parent 1: classid 1: htb rate 1000mbit ceil 1000mbit</div><div class="line">tc class add dev eth0 parent 1: classid 1:2 htb rate 1mbit</div><div class="line">tc filter add dev eth0 protocol ip parent 1:0 prio 1 handle 1:2 cgroup</div></pre></td></tr></table></figure>
+<p>查看进行流控后的容器进程流量：</p>
+<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pic/rmp_net_cls_after.png?raw=true" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://septimuszhu.github.io/2017/05/27/mesos-net-cls-test/" data-id="cj36qewq30004a689l59y44st" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-get-started-with-flink-on-top-of-mesos-marathon" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/" class="article-date">
@@ -147,7 +199,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/" data-id="cj1w90mzu00025n89q24o640n" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/" data-id="cj36qewpr0000a6897qx7h9ay" class="article-share-link">Share</a>
       
       
     </footer>
@@ -275,7 +327,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/04/12/deploy-flink-on-mesos-marathon/" data-id="cj1w90mzl00005n89dwwedpaf" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/04/12/deploy-flink-on-mesos-marathon/" data-id="cj36qewpy0002a689fs5bnvse" class="article-share-link">Share</a>
       
       
     </footer>
@@ -317,7 +369,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/" data-id="cj1w90mzr00015n89i75jz24d" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/" data-id="cj36qewpw0001a689kzpc5tb6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -364,7 +416,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/29/libprocess-tips/" data-id="cj1w90n0e00045n89i66dq58t" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/29/libprocess-tips/" data-id="cj36qewq50005a689q17vdufo" class="article-share-link">Share</a>
       
       
     </footer>
@@ -432,7 +484,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/" data-id="cj1w90n0e00055n898y7d3bwk" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/" data-id="cj36qewq90006a689n7caliz6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -477,7 +529,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://septimuszhu.github.io/2017/03/24/hello-world/" data-id="cj1w90n0d00035n895of1kg0i" class="article-share-link">Share</a>
+      <a data-url="http://septimuszhu.github.io/2017/03/24/hello-world/" data-id="cj36qewq20003a6897ik8lhl0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -504,7 +556,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
     </div>
   </div>
 
@@ -515,6 +567,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/05/27/mesos-net-cls-test/">mesos net_cls test</a>
+          </li>
         
           <li>
             <a href="/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/">Get Started with Flink on top of Mesos Marathon</a>
@@ -530,10 +586,6 @@
         
           <li>
             <a href="/2017/03/29/libprocess-tips/">Libprocess concepts</a>
-          </li>
-        
-          <li>
-            <a href="/2017/03/24/mesos-containerizer-tips/">Mesos Containerizer</a>
           </li>
         
       </ul>
