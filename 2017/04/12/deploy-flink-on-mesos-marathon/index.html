@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Mesos,Marathon,Flink," />
 
 
 
@@ -81,18 +81,14 @@
 
 <meta name="description" content="Mesos部署1.下载安装从官网下载Mesos的rpm安装包（下载链接）并在所有集群节点中安装mesos
 1rpm -ivh mesos-1.1.0*.rpm
-注：可能会报libevent-devel依赖未安装，使用命令yum install libevent libevent-devel -y安装
-2.集群部署
-在/usr/etc/mesos目录下增加名为masters和slaves的文件，分别">
+注：可能会报libevent-devel依赖未安装，使用命令yum install libevent libevent-devel -y安装">
 <meta property="og:type" content="article">
 <meta property="og:title" content="deploy flink on mesos marathon">
 <meta property="og:url" content="http://septimuszhu.github.io/2017/04/12/deploy-flink-on-mesos-marathon/index.html">
 <meta property="og:site_name" content="Cien anos de soledad">
 <meta property="og:description" content="Mesos部署1.下载安装从官网下载Mesos的rpm安装包（下载链接）并在所有集群节点中安装mesos
 1rpm -ivh mesos-1.1.0*.rpm
-注：可能会报libevent-devel依赖未安装，使用命令yum install libevent libevent-devel -y安装
-2.集群部署
-在/usr/etc/mesos目录下增加名为masters和slaves的文件，分别">
+注：可能会报libevent-devel依赖未安装，使用命令yum install libevent libevent-devel -y安装">
 <meta property="og:image" content="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_master_slave.PNG?raw=true">
 <meta property="og:image" content="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_master_env.PNG?raw=true">
 <meta property="og:image" content="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_agent_env.PNG?raw=true">
@@ -108,14 +104,12 @@
 <meta property="og:image" content="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/marathon_scale_result.PNG?raw=true">
 <meta property="og:image" content="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/marathon_add_app_result.PNG?raw=true">
 <meta property="og:image" content="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_systemd_service.PNG?raw=true">
-<meta property="og:updated_time" content="2017-04-21T15:48:29.000Z">
+<meta property="og:updated_time" content="2018-07-18T04:00:30.399Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="deploy flink on mesos marathon">
 <meta name="twitter:description" content="Mesos部署1.下载安装从官网下载Mesos的rpm安装包（下载链接）并在所有集群节点中安装mesos
 1rpm -ivh mesos-1.1.0*.rpm
-注：可能会报libevent-devel依赖未安装，使用命令yum install libevent libevent-devel -y安装
-2.集群部署
-在/usr/etc/mesos目录下增加名为masters和slaves的文件，分别">
+注：可能会报libevent-devel依赖未安装，使用命令yum install libevent libevent-devel -y安装">
 <meta name="twitter:image" content="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_master_slave.PNG?raw=true">
 
 
@@ -363,6 +357,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Flink部署/" itemprop="url" rel="index">
+                    <span itemprop="name">Flink部署</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -398,6 +414,7 @@
         <h2 id="Mesos部署"><a href="#Mesos部署" class="headerlink" title="Mesos部署"></a>Mesos部署</h2><h4 id="1-下载安装"><a href="#1-下载安装" class="headerlink" title="1.下载安装"></a>1.下载安装</h4><p>从官网下载Mesos的rpm安装包（<a href="http://repos.mesosphere.com/el/7/x86_64/RPMS/mesos-1.1.0-2.0.107.centos701406.x86_64.rpm" target="_blank" rel="external">下载链接</a>）并在所有集群节点中安装mesos</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -ivh mesos-1.1.0*.rpm</div></pre></td></tr></table></figure>
 <p>注：可能会报libevent-devel依赖未安装，使用命令<code>yum install libevent libevent-devel -y</code>安装</p>
+<a id="more"></a>
 <h4 id="2-集群部署"><a href="#2-集群部署" class="headerlink" title="2.集群部署"></a>2.集群部署</h4><ul>
 <li><p>在<code>/usr/etc/mesos</code>目录下增加名为masters和slaves的文件，分别配上master节点和agent(worker)节点的ip列表，以换行分隔，以1个master节点2个agent节点为例：</p>
 <p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_master_slave.PNG?raw=true" alt=""></p>
@@ -501,6 +518,16 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mesos/" rel="tag"># Mesos</a>
+          
+            <a href="/tags/Marathon/" rel="tag"># Marathon</a>
+          
+            <a href="/tags/Flink/" rel="tag"># Flink</a>
+          
+        </div>
       
 
       
@@ -607,7 +634,25 @@
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
             
 
           </nav>
@@ -667,7 +712,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

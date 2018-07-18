@@ -334,6 +334,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/科学上网/" itemprop="url" rel="index">
+                    <span itemprop="name">科学上网</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -458,6 +480,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mesos/" itemprop="url" rel="index">
+                    <span itemprop="name">Mesos</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -486,25 +530,16 @@
 
       
         
-          
-            <h4 id="1-mesos启动参数配置"><a href="#1-mesos启动参数配置" class="headerlink" title="1.mesos启动参数配置"></a>1.mesos启动参数配置</h4><p>slave启动参数配置，增加net_cls</p>
+          <h4 id="1-mesos启动参数配置"><a href="#1-mesos启动参数配置" class="headerlink" title="1.mesos启动参数配置"></a>1.mesos启动参数配置</h4><p>slave启动参数配置，增加net_cls</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo cgroups/cpu,cgroups/mem,cgroups/net_cls &gt; /etc/mesos-slave/isolation</div></pre></td></tr></table></figure>
 <p>增加mesos-slave启动参数<code>--cgroups_net_cls_primary_handle=0x0001</code>，可以通过修改<code>/usr/bin/mesos-init-wrapper</code>脚本实现，最终mesos-slave启动参数如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/sbin/mesos-slave --master=zk://10.120.177.85:2181,10.120.181.94:2181,10.120.180.209:2181/mesos --log_dir=/var/log/mesos --cgroups_net_cls_primary_handle=0x0001 --containerizers=mesos --isolation=cgroups/cpu,cgroups/mem,cgroups/net_cls --work_dir=/var/lib/meso</div></pre></td></tr></table></figure>
-<p>此时mesos会为每个容器分配一个16位的cgroups_net_cls_secondary_handle，和cgroups_net_cls_primary_handle(0x0001)一起组成一个classid。</p>
-<h4 id="2-启动应用"><a href="#2-启动应用" class="headerlink" title="2. 启动应用"></a>2. 启动应用</h4><p>使用marathon提交nc命令行应用，向对端发数据：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"id"</span>: <span class="string">"/basic-023"</span>,</div><div class="line">  <span class="attr">"cmd"</span>: <span class="string">"yes ssssssssssssssssssssss|nc 10.162.174.188 5567"</span>,</div><div class="line">  <span class="attr">"cpus"</span>: <span class="number">1</span>,</div><div class="line">  <span class="attr">"mem"</span>: <span class="number">10</span>,</div><div class="line">  <span class="attr">"disk"</span>: <span class="number">0</span>,</div><div class="line">  <span class="attr">"instances"</span>: <span class="number">1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>使用<code>nethogs</code>工具查看进程流量：</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pic/rmp_net_cls_before.png?raw=true" alt=""></p>
-<h4 id="3-启用流控规则"><a href="#3-启用流控规则" class="headerlink" title="3. 启用流控规则"></a>3. 启用流控规则</h4><p>查看容器进程的classid：</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pic/rmp_net_cls_classid.png?raw=true" alt=""></p>
-<p>65538 = 0x00010002</p>
-<p>使用tc工具配置规则：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tc qdisc del dev eth0 root</div><div class="line">tc qdisc add dev eth0 root handle 1: htb</div><div class="line">tc class add dev eth0 parent 1: classid 1: htb rate 1000mbit ceil 1000mbit</div><div class="line">tc class add dev eth0 parent 1: classid 1:2 htb rate 1mbit</div><div class="line">tc filter add dev eth0 protocol ip parent 1:0 prio 1 handle 1:2 cgroup</div></pre></td></tr></table></figure>
-<p>查看进行流控后的容器进程流量：</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pic/rmp_net_cls_after.png?raw=true" alt=""></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/05/27/mesos-net-cls-test/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -593,6 +628,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Flink部署/" itemprop="url" rel="index">
+                    <span itemprop="name">Flink部署</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -621,65 +678,17 @@
 
       
         
-          
-            <p>Based on CentOS 7</p>
-<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><h4 id="rpm安装包准备"><a href="#rpm安装包准备" class="headerlink" title="rpm安装包准备"></a>rpm安装包准备</h4><p><a href="http://dl.marmotte.net/rpms/redhat/el7/x86_64/zookeeper-3.4.9-3.el7/zookeeper-3.4.9-3.el7.noarch.rpm" target="_blank" rel="external">zookeeper</a></p>
-<p><a href="http://repos.mesosphere.com/el/7/x86_64/RPMS/mesos-1.1.0-2.0.107.centos701406.x86_64.rpm" target="_blank" rel="external">mesos</a></p>
-<p><a href="http://repos.mesosphere.com/el-testing/6/x86_64/RPMS/marathon-1.4.0-1.0.560.el6.x86_64.rpm" target="_blank" rel="external">marathon</a></p>
-<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>三台机器的集群，网络互通，关闭防火墙和SELinux</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl stop firewalld &amp;&amp; setenforce 0</div></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">节点</th>
-<th style="text-align:center">IP</th>
-<th style="text-align:center">部署服务</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">10.120.177.85</td>
-<td style="text-align:center">zookeeper、mesos-master、mesos-slave、marathon</td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">10.120.181.94</td>
-<td style="text-align:center">zookeeper、mesos-master、mesos-slave、marathon</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">10.120.180.209</td>
-<td style="text-align:center">zookeeper、mesos-master、mesos-slave、marathon</td>
-</tr>
-</tbody>
-</table>
-<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>node1、node2、node3:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">rpm -ivh zookeeper*.rpm</div><div class="line">yum install libevent libevent-devel -y</div><div class="line">rpm -ivh mesos*.rpm</div><div class="line">rpm -ivh marathon*.rpm</div></pre></td></tr></table></figure>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="zookeeper配置"><a href="#zookeeper配置" class="headerlink" title="zookeeper配置"></a>zookeeper配置</h4><p>node1:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo 1 &gt; /var/lib/zookeeper/myid</div></pre></td></tr></table></figure>
-<p>node2:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo 2 &gt; /var/lib/zookeeper/myid</div></pre></td></tr></table></figure>
-<p>node3:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo 3 &gt; /var/lib/zookeeper/myid</div></pre></td></tr></table></figure>
-<p>node1、node2、node3配置<code>/etc/zookeeper/zoo.cfg</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">server.1=10.120.177.85:2888:3888</div><div class="line">server.2=10.120.181.94:2888:3888</div><div class="line">server.3=10.120.180.209:2888:3888</div></pre></td></tr></table></figure>
-<h4 id="mesos配置"><a href="#mesos配置" class="headerlink" title="mesos配置"></a>mesos配置</h4><p>node1、node2、node3配置<code>/etc/mesos/zk</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zk://10.120.177.85:2181,10.120.181.94:2181,10.120.180.209:2181/mesos</div></pre></td></tr></table></figure>
-<p>node1、node2、node3:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#集群中节点数为3</div><div class="line">echo 2 &gt; /etc/mesos-master/quorum</div></pre></td></tr></table></figure>
-<h4 id="marathon配置"><a href="#marathon配置" class="headerlink" title="marathon配置"></a>marathon配置</h4><p>node1、node2、node3:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#用于生成marathon.jar</div><div class="line">marathon</div></pre></td></tr></table></figure>
-<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>node1、node2、node3:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">systemctl restart zookeeper</div><div class="line">systemctl restart mesos-master</div><div class="line">systemctl restart mesos-slave</div><div class="line">marathon run_jar --master zk://10.120.177.85:2181,10.120.181.94:2181,10.120.180.209:2181/mesos --zk zk://10.120.177.85:2181,10.120.181.94:2181,10.120.180.209:2181/marathon</div></pre></td></tr></table></figure>
-<p>可通过三个节点IP访问mesos webUI和marathon webUI，会重定向到zk选举出来的Master节点，以10.120.181.94为例:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mesos webUI address: 10.120.181.94:5050</div><div class="line">marathon webUI address: 10.120.181.94:8080</div></pre></td></tr></table></figure>
-<h4 id="部署Flink"><a href="#部署Flink" class="headerlink" title="部署Flink"></a>部署Flink</h4><p>编写json格式的marathon应用描述文件flink-example.json:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"id"</span>: <span class="string">"flink"</span>,</div><div class="line">  <span class="attr">"cmd"</span>: <span class="string">"/home/flink-1.2.0/bin/mesos-appmaster.sh -Dmesos.master=zk://10.120.177.85:2181,10.120.181.94:2181,10.120.180.209:2181/mesos -Dmesos.initial-tasks=3 -Dmesos.resourcemanager.tasks.cpus=1.0 -Dmesos.resourcemanager.tasks.mem=1024"</span>,</div><div class="line">  <span class="attr">"cpus"</span>: <span class="number">1</span>,</div><div class="line">  <span class="attr">"mem"</span>: <span class="number">1024</span>,</div><div class="line">  <span class="attr">"disk"</span>: <span class="number">2048</span>,</div><div class="line">  <span class="attr">"instances"</span>: <span class="number">1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>通过Marathon WebUI提交或者使用curl命令提交:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X POST http://10.120.181.94:8080/v2/apps -d @flink-example.json -H &quot;Content-type: application/json&quot;</div></pre></td></tr></table></figure>
-
-          
+          <p>Based on CentOS 7</p>
+<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><h4 id="rpm安装包准备"><a href="#rpm安装包准备" class="headerlink" title="rpm安装包准备"></a>rpm安装包准备</h4><p><a href="http://dl.marmotte.net/rpms/redhat/el7/x86_64/zookeeper-3.4.9-3.el7/zookeeper-3.4.9-3.el7.noarch.rpm">zookeeper</a></p>
+<p><a href="http://repos.mesosphere.com/el/7/x86_64/RPMS/mesos-1.1.0-2.0.107.centos701406.x86_64.rpm">mesos</a></p>
+<p><a href="http://repos.mesosphere.com/el-testing/6/x86_64/RPMS/marathon-1.4.0-1.0.560.el6.x86_64.rpm">marathon</a></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -768,6 +777,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Flink部署/" itemprop="url" rel="index">
+                    <span itemprop="name">Flink部署</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -796,101 +827,16 @@
 
       
         
-          
-            <h2 id="Mesos部署"><a href="#Mesos部署" class="headerlink" title="Mesos部署"></a>Mesos部署</h2><h4 id="1-下载安装"><a href="#1-下载安装" class="headerlink" title="1.下载安装"></a>1.下载安装</h4><p>从官网下载Mesos的rpm安装包（<a href="http://repos.mesosphere.com/el/7/x86_64/RPMS/mesos-1.1.0-2.0.107.centos701406.x86_64.rpm" target="_blank" rel="external">下载链接</a>）并在所有集群节点中安装mesos</p>
+          <h2 id="Mesos部署"><a href="#Mesos部署" class="headerlink" title="Mesos部署"></a>Mesos部署</h2><h4 id="1-下载安装"><a href="#1-下载安装" class="headerlink" title="1.下载安装"></a>1.下载安装</h4><p>从官网下载Mesos的rpm安装包（<a href="http://repos.mesosphere.com/el/7/x86_64/RPMS/mesos-1.1.0-2.0.107.centos701406.x86_64.rpm">下载链接</a>）并在所有集群节点中安装mesos</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -ivh mesos-1.1.0*.rpm</div></pre></td></tr></table></figure>
 <p>注：可能会报libevent-devel依赖未安装，使用命令<code>yum install libevent libevent-devel -y</code>安装</p>
-<h4 id="2-集群部署"><a href="#2-集群部署" class="headerlink" title="2.集群部署"></a>2.集群部署</h4><ul>
-<li><p>在<code>/usr/etc/mesos</code>目录下增加名为masters和slaves的文件，分别配上master节点和agent(worker)节点的ip列表，以换行分隔，以1个master节点2个agent节点为例：</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_master_slave.PNG?raw=true" alt=""></p>
-</li>
-<li><p>在master节点所在机器的<code>/usr/etc/mesos</code>目录下，增加mesos-master-env.sh脚本（在相同目录下已存在模板），配置mesos工作目录环境变量<code>export MESOS_work_dir=/xxx/xxx</code></p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_master_env.PNG?raw=true" alt=""></p>
-</li>
-<li><p>在agent节点所在机器（在本例中，包括9.96.101.32和9.96.101.251两个节点）的<code>/usr/etc/mesos</code>目录下，增加mesos-agent-env.sh脚本（在相同目录下已存在模板），配置mesos master地址<code>export MESOS_master=xx.xx.xx.xx:5050</code>，和mesos工作目录环境变量<code>export MESOS_work_dir=/xxx/xxx</code></p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_agent_env.PNG?raw=true" alt=""></p>
-</li>
-<li><p>运行<code>/usr/sbin/mesos-start-cluster.sh</code>启动集群</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_start_cluster.PNG?raw=true" alt=""></p>
-</li>
-<li><p>访问mesos web页面<code>http://masterIP:5050</code>可以查看mesos集群状态和agent列表等信息</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_web.PNG?raw=true" alt=""></p>
-</li>
-</ul>
-<p>  <img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_web_agent.PNG?raw=true" alt=""></p>
-<h4 id="3-部署Flink到Mesos"><a href="#3-部署Flink到Mesos" class="headerlink" title="3.部署Flink到Mesos"></a>3.部署Flink到Mesos</h4><ul>
-<li><p>修改<code>FLINK_HOME/conf/flink-conf.yaml</code>，增加三个配置项：<code>mesos.resourcemanager.tasks.container.type</code>、<code>mesos.master</code>、<code>mesos.initial-tasks</code>，如下图所示，其中mesos.initial-tasks配置项表示taskmanager个数。</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_flink_conf.PNG?raw=true" alt=""></p>
-</li>
-<li><p>运行<code>FLINK_HOME/bin/mesos-appmaster.sh</code>向mesos注册schduler并启动jobmanager</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_flink_start.PNG?raw=true" alt=""></p>
-</li>
-<li><p>查看mesos web页面，可以看到刚才启动的Flink集群在mesos中体现为1个Framework和2个Task（executor），每个java进程（mesos中的executor，flink中的taskmanager）对应一个sandbox</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_web_flink.PNG?raw=true" alt=""></p>
-</li>
-</ul>
-<h4 id="4-查看沙箱目录"><a href="#4-查看沙箱目录" class="headerlink" title="4.查看沙箱目录"></a>4.查看沙箱目录</h4><p>沙箱是每个mesos executor工作时的临时目录。存在于agent节点的工作目录下，工作目录的配置见上文。沙箱的目录结构在官方文档中描述如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">root (&apos;--work_dir&apos;)</div><div class="line">|-- slaves</div><div class="line">|   |-- latest (symlink)</div><div class="line">|   |-- &lt;agent ID&gt;</div><div class="line">|       |-- frameworks</div><div class="line">|           |-- &lt;framework ID&gt;</div><div class="line">|               |-- executors</div><div class="line">|                   |-- &lt;executor ID&gt;</div><div class="line">|                       |-- runs</div><div class="line">|                           |-- latest (symlink)</div><div class="line">|                           |-- &lt;container ID&gt; (Sandbox!)</div></pre></td></tr></table></figure>
-<p>登陆到本例中task所在节点9.96.101.251查看两个task各自的sandbox目录，包含了进程的标准输出、错误、日志，以及flink上传的jar包、配置文件和shell脚本等，与yarn的container目录很类似。</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_sandbox.PNG?raw=true" alt=""></p>
-<p>沙箱中的文件包含如下三部分：</p>
-<ul>
-<li>mesos在启动executor的task前获取的文件（flink文件夹）</li>
-<li>executor的输出（stderr，stdout）</li>
-<li>executor创建的文件（flink-taskmanager.log等）</li>
-</ul>
-<h2 id="Marathon部署"><a href="#Marathon部署" class="headerlink" title="Marathon部署"></a>Marathon部署</h2><h4 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Marathon is a production-proven Apache Mesos framework for container orchestration. Marathon provides a REST API for starting, stopping, and scaling applications.</div></pre></td></tr></table></figure>
-<p>翻译一下，Marathon是一个在工业界广泛使用的Mesos框架，用于容器编排。Marathon提供了一套REST API用于任务的启动、停止和扩容。</p>
-<p>Marathon框架通常用于管理长时间运行的任务。</p>
-<h4 id="2-下载安装"><a href="#2-下载安装" class="headerlink" title="2.下载安装"></a>2.下载安装</h4><p>从官网下载Marathon的rpm安装包（<a href="http://repos.mesosphere.com/el-testing/6/x86_64/RPMS/marathon-1.4.0-1.0.560.el6.x86_64.rpm" target="_blank" rel="external">下载链接</a>）并安装（推荐的安装方式）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -ivh marathon-1.4.0*.rpm</div></pre></td></tr></table></figure>
-<p>也可以从Marathon官网下载二进制的包（<a href="http://downloads.mesosphere.com/marathon/v1.4.1/marathon-1.4.1.tgz" target="_blank" rel="external">下载地址</a>），使用<code>$MARATHON_HOME/bin/start --master ip:port --zk zk://ip:port/marathon</code>启动Marathon。</p>
-<h4 id="3-启动"><a href="#3-启动" class="headerlink" title="3.启动"></a>3.启动</h4><p>命令样例如下，需要首先启动mesos集群和zk服务，不在此赘述。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/bin/marathon run_jar --master 10.120.177.85:5050 --zk zk://10.120.177.85:2181/marathon</div></pre></td></tr></table></figure>
-<p>注：不同版本marathon在zk上的leader信息不兼容，需确保zk中/marathon目录未被不同版本的marathon服务使用过</p>
-<p>可以使用<code>/usr/bin/marathon run_jar --help</code>查看其它配置项说明。</p>
-<h4 id="4-提交任务"><a href="#4-提交任务" class="headerlink" title="4.提交任务"></a>4.提交任务</h4><p>可以用两种方式提交应用，WebUI和curl。</p>
-<p>打开Marathon WebUI（默认端口8080），点击Create Application，可以选在使用JSON模式描述任务信息，或者使用UI界面，本例中使用JSON方式，在cmd中写入运行的命令，点击右下角的Create Application提交。</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/marathon.PNG?raw=true" alt=""></p>
-<p>使用curl方式提交命令格式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X POST http://10.120.177.85:8080/v2/apps -d @basic-0.json -H &quot;Content-type: application/json&quot;</div></pre></td></tr></table></figure>
-<h4 id="5-部署Flink"><a href="#5-部署Flink" class="headerlink" title="5.部署Flink"></a>5.部署Flink</h4><p>只需要将cmd的内容修改为<code>$FLINK_HOME/bin/mesos-appmaster.sh -Dmesos.master=$MESOS_MASTER_IP:5050</code>即可在Mesos中部署Flink集群。</p>
-<p>涉及Flink的配置项列表参见<a href="https://ci.apache.org/projects/flink/flink-docs-release-1.2/setup/config.html#mesos" target="_blank" rel="external">Flink官网</a>，资源相关的配置项包括<code>mesos.initial-tasks</code>、<code>mesos.resourcemanager.tasks.mem</code>和<code>mesos.resourcemanager.tasks.cpus</code>，分别代表启用多少个TaskManager以及每个TaskManager分配多少内存和CPU资源。</p>
-<p>Mesos的资源分配使用DRF算法，参考论文：<a href="http://static.usenix.org/event/nsdi11/tech/full_papers/Ghodsi.pdf" target="_blank" rel="external">Dominant Resource Fairness: Fair Allocation of Multiple Resource Types</a>，解决多种资源类型(主要考虑CPU和内存)的系统的公平资源分配问题。</p>
-<p>使用如下json文件启动flink应用：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"id"</span>: <span class="string">"/flink/flink1"</span>,</div><div class="line">  <span class="attr">"cmd"</span>: <span class="string">"/home/flink-1.2.0/bin/mesos-appmaster.sh -Dmesos.master=10.120.177.85:5050 -Dmesos.initial-tasks=3 -Dmesos.resourcemanager.tasks.cpus=1.0 -Dmesos.resourcemanager.tasks.mem=1024 -Djobmanager.web.port=-1"</span>,</div><div class="line">  <span class="attr">"cpus"</span>: <span class="number">1</span>,</div><div class="line">  <span class="attr">"mem"</span>: <span class="number">1024</span>,</div><div class="line">  <span class="attr">"disk"</span>: <span class="number">2048</span>,</div><div class="line">  <span class="attr">"instances"</span>: <span class="number">1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>使用Marathon的应用扩容功能，将实例数改为3：</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/marathon_scale_app.PNG?raw=true" alt=""></p>
-<p>在Mesos页面中查看部署结果：</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/marathon_scale_result.PNG?raw=true" alt=""></p>
-<p>Scale Application的过程中，因JobManager RPC端口冲突，会重试数次，最终三个JobManager部署到三个不同的节点上。</p>
-<p>再增加一个Flink应用，因集群资源有限，只有三个节点，因此在运行参数中增加<code>-Djobmanager.web.port=8082 -Djobmanager.rpc.port=6124</code>，避免端口冲突。</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"id"</span>: <span class="string">"/flink/flink2"</span>,</div><div class="line">  <span class="attr">"cmd"</span>: <span class="string">"/home/flink-1.2.0/bin/mesos-appmaster.sh -Dmesos.master=10.120.177.85:5050 -Dmesos.initial-tasks=3 -Dmesos.resourcemanager.tasks.cpus=1.0 -Dmesos.resourcemanager.tasks.mem=1024 -Djobmanager.web.port=-1 -Djobmanager.rpc.port=6124"</span>,</div><div class="line">  <span class="attr">"cpus"</span>: <span class="number">1</span>,</div><div class="line">  <span class="attr">"mem"</span>: <span class="number">1024</span>,</div><div class="line">  <span class="attr">"disk"</span>: <span class="number">2048</span>,</div><div class="line">  <span class="attr">"instances"</span>: <span class="number">1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>部署结果如下:</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/marathon_add_app_result.PNG?raw=true" alt=""></p>
-<h4 id="6-遇到的问题"><a href="#6-遇到的问题" class="headerlink" title="6.遇到的问题"></a>6.遇到的问题</h4><ol>
-<li><p>在Marathon中部署跨节点Flink集群时，部署失败</p>
-<p>查看TaskManager日志，报<code>Association failed with [akka.tcp://flink@szv1000265118:6123] Connection refused: szv1000265118/10.120.181.94:6123</code>而JobManager所在节点hostname为SZV1000265118，怀疑与hostname大小写有关。</p>
-<p><a href="https://github.com/apache/flink/pull/3688" target="_blank" rel="external">相关github PR</a>，修改hostname后问题解决。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostnamectl set-hostname &lt;hostname&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>在Marathon中Destroy Application后JobManager退出，但是TaskManager要等数分钟后才退出</p>
-<p>查看日志发现TaskManager向JobManager注册多次后超时关闭，查看代码发现<code>MesosApplicationMasterRunner.java</code>中有如下代码，TaskManager向JobManager注册的最大超时时间为5分钟，在代码中写死，无配置项。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> FiniteDuration TASKMANAGER_REGISTRATION_TIMEOUT = <span class="keyword">new</span> FiniteDuration(<span class="number">5</span>, TimeUnit.MINUTES);</div></pre></td></tr></table></figure>
-</li>
-<li><p>systemd Mesos守护进程问题</p>
-<p>在Mesos集群重启时，经常发现agent进程起不来，<code>ps -ef | grep mesos</code>查看系统进程时发现运行<code>/usr/sbin/mesos-stop-cluster.sh</code>一段时间后，会出现mesos-master和mesos-slave进程。</p>
-<p>rpm方式安装mesos时，会向systemd注册mesos相关服务，导致mesos相关进程在被杀掉后周期重启，见下图：</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_systemd_service.PNG?raw=true" alt=""></p>
-<p>使用<code>systemctl</code>命令停止mesos相关服务后再启动Mesos集群，问题解决。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">systemctl stop mesos-master</div><div class="line">systemctl stop mesos-slave</div><div class="line">pkill mesos</div><div class="line">/usr/sbin/mesos-start-cluster.sh</div></pre></td></tr></table></figure>
-</li>
-<li><p>CentOS防火墙问题导致Mesos、Marathon网页无法访问</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl stop firewalld</div></pre></td></tr></table></figure>
-</li>
-</ol>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/12/deploy-flink-on-mesos-marathon/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -978,6 +924,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Scala/" itemprop="url" rel="index">
+                    <span itemprop="name">Scala</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -1104,6 +1072,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mesos/" itemprop="url" rel="index">
+                    <span itemprop="name">Mesos</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -1132,20 +1122,16 @@
 
       
         
-          
-            <p>先看官方定义：</p>
+          <p>先看官方定义：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Library that provides an actor style message-passing programming model (in C++).</div></pre></td></tr></table></figure>
 <p>mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onAny等回调注册接口，以及then串接异步调用等等强大功能。</p>
-<h4 id="future／promise-概念"><a href="#future／promise-概念" class="headerlink" title="future／promise 概念"></a>future／promise 概念</h4><p>先看cplusplus.com官方定义：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1. A future is an object that can retrieve a value from some provider object or function, </div><div class="line">properly synchronizing this access if in different threads.</div><div class="line">2. A promise is an object that can store a value of type T to be retreieved by a future </div><div class="line">object (possibly in another thread), offering a synchronization point.</div></pre></td></tr></table></figure>
-<p>libprocess中实现了一套类似的future／promise（类比std::future／std::promise），其思想与c++很类似，future读，promise写，消费者持有future，生产者持有promise，在命名上别有意趣。</p>
-<h4 id="callback"><a href="#callback" class="headerlink" title="callback"></a>callback</h4><p>Future对象在函数返回值和入参间传递，存在多个消费者持有Future对象的多份拷贝的情况，因此Future使用一个共享指针成员维护唯一一份Data，在Data中记录Future状态和一系列callback，这些callback由onXXX接口注册，当生产者调用Promise的set等接口改变Future状态时将调用对应的callback。then也应用了callback机制。</p>
-<h4 id="then"><a href="#then" class="headerlink" title="then"></a>then</h4><p>先看示例代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Future&lt;string&gt; S = readyFuture()</div><div class="line">  .then(lambda::bind(&amp;second, lambda::_1))</div><div class="line">  .then(lambda::bind(&amp;third, lambda::_1));</div><div class="line"></div><div class="line">string s = S.get();</div></pre></td></tr></table></figure>
-<p>等同于：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Future&lt;bool&gt; A = oneFuture();</div><div class="line">Future&lt;int&gt; B = second(A.get());</div><div class="line">Future&lt;string&gt; S = third(B.get());</div><div class="line"></div><div class="line">string s = S.get();</div></pre></td></tr></table></figure>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/29/libprocess-tips/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1234,6 +1220,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mesos/" itemprop="url" rel="index">
+                    <span itemprop="name">Mesos</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -1262,41 +1270,20 @@
 
       
         
-          
-            <p>Mesos Containerizer是mesos agent的关键部件，提供容器化所需的服务。</p>
+          <p>Mesos Containerizer是mesos agent的关键部件，提供容器化所需的服务。</p>
 <ul>
 <li>位于agent和容器之间</li>
 <li>启动、更新和销毁容器</li>
 <li>提供容器间的隔离</li>
 <li>上报容器状态</li>
 </ul>
-<p>当前mesos支持以多种方式提供容器服务：Docker Containerizer、Mesos Containerizer以及两者混合。Mesos Containerizer更加稳定。</p>
-<p>Mesos Containerizer主要包括以下三个组件：</p>
-<ul>
-<li>Launcher，负责启动和销毁容器进程</li>
-<li>Isolator，最主要的功能组件，通过cgroup、namespace实现容器间资源隔离</li>
-<li>Provisioner，提供容器镜像支持</li>
-</ul>
-<p>容器启动的主要步骤如下：</p>
-<ol>
-<li><p>Isolator准备</p>
-<p>包含创建cgroup目录和初始化cgroup subsystem相关参数等操作。举一个cgroup subsystem为memory的例子，经过<code>CgroupsIsolatorProcess::prepare</code>的调用过程后，新生成了如下cgroup目录，并设置相关初始化参数</p>
-<p align="left"><br><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_mem.PNG?raw=true" alt=""><br></p></li>
-<li><p>通过Launcher启动容器进程</p>
-<p>Launcher的具体实现<code>LinuxLauncher</code>通过libprocess的actor模型调用<code>LinuxLauncherProcess::fork</code>创建容器子进程。主要包括创建subsystem为freezer的cgroup，并将子进程pid放入其中，如下图所示：<br></p><p align="left"><br><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_freezer.PNG?raw=true" alt=""><br></p><br>放入freezer cgroup的进程会暂停，直到隔离和fetch完成后，在exec时通过信号将子进程唤醒。<p></p>
-</li>
-<li><p>隔离容器进程</p>
-<p>Isolator的具体实现有很多，主要包括cgroup、network cni等资源隔离接口，其中cgroup的隔离的过程就是将进程pid放入对应的cgroup中。具体实现在<code>CgroupsIsolatorProcess::isolate</code></p>
-<p align="left"><br><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/mesos_cgroup_mem_isolate.PNG?raw=true" alt=""><br></p></li>
-<li><p>fetch容器资源</p>
-<p>fetch是一种在容器任务准备时将容器资源下载到沙箱目录的机制，为后续的exec过程做准备。</p>
-</li>
-<li><p>执行容器进程</p>
-<p>之前fork出来的容器子进程被唤醒。</p>
-</li>
-</ol>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/24/mesos-containerizer-tips/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1511,7 +1498,25 @@
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
             
 
           </nav>
@@ -1555,7 +1560,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

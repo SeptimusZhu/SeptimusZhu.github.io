@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Mesos,Marathon,Flink," />
 
 
 
@@ -82,22 +82,7 @@
 <meta name="description" content="Based on CentOS 7
 准备rpm安装包准备zookeeper
 mesos
-marathon
-环境准备三台机器的集群，网络互通，关闭防火墙和SELinux
-1systemctl stop firewalld &amp;amp;&amp;amp; setenforce 0
-
-
-
-节点
-IP
-部署服务
-
-
-
-
-1
-10.120.177.85
-zookeeper、mesos-master、mesos-sla">
+marathon">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Get Started with Flink on top of Mesos Marathon">
 <meta property="og:url" content="http://septimuszhu.github.io/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/index.html">
@@ -105,44 +90,14 @@ zookeeper、mesos-master、mesos-sla">
 <meta property="og:description" content="Based on CentOS 7
 准备rpm安装包准备zookeeper
 mesos
-marathon
-环境准备三台机器的集群，网络互通，关闭防火墙和SELinux
-1systemctl stop firewalld &amp;amp;&amp;amp; setenforce 0
-
-
-
-节点
-IP
-部署服务
-
-
-
-
-1
-10.120.177.85
-zookeeper、mesos-master、mesos-sla">
-<meta property="og:updated_time" content="2017-04-24T14:59:16.000Z">
+marathon">
+<meta property="og:updated_time" content="2018-07-18T04:00:38.754Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Get Started with Flink on top of Mesos Marathon">
 <meta name="twitter:description" content="Based on CentOS 7
 准备rpm安装包准备zookeeper
 mesos
-marathon
-环境准备三台机器的集群，网络互通，关闭防火墙和SELinux
-1systemctl stop firewalld &amp;amp;&amp;amp; setenforce 0
-
-
-
-节点
-IP
-部署服务
-
-
-
-
-1
-10.120.177.85
-zookeeper、mesos-master、mesos-sla">
+marathon">
 
 
 
@@ -389,6 +344,28 @@ zookeeper、mesos-master、mesos-sla">
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Flink部署/" itemprop="url" rel="index">
+                    <span itemprop="name">Flink部署</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -425,6 +402,7 @@ zookeeper、mesos-master、mesos-sla">
 <h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><h4 id="rpm安装包准备"><a href="#rpm安装包准备" class="headerlink" title="rpm安装包准备"></a>rpm安装包准备</h4><p><a href="http://dl.marmotte.net/rpms/redhat/el7/x86_64/zookeeper-3.4.9-3.el7/zookeeper-3.4.9-3.el7.noarch.rpm" target="_blank" rel="external">zookeeper</a></p>
 <p><a href="http://repos.mesosphere.com/el/7/x86_64/RPMS/mesos-1.1.0-2.0.107.centos701406.x86_64.rpm" target="_blank" rel="external">mesos</a></p>
 <p><a href="http://repos.mesosphere.com/el-testing/6/x86_64/RPMS/marathon-1.4.0-1.0.560.el6.x86_64.rpm" target="_blank" rel="external">marathon</a></p>
+<a id="more"></a>
 <h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><p>三台机器的集群，网络互通，关闭防火墙和SELinux</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl stop firewalld &amp;&amp; setenforce 0</div></pre></td></tr></table></figure>
 <table>
@@ -491,6 +469,16 @@ zookeeper、mesos-master、mesos-sla">
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mesos/" rel="tag"># Mesos</a>
+          
+            <a href="/tags/Marathon/" rel="tag"># Marathon</a>
+          
+            <a href="/tags/Flink/" rel="tag"># Flink</a>
+          
+        </div>
       
 
       
@@ -597,7 +585,25 @@ zookeeper、mesos-master、mesos-sla">
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
             
 
           </nav>
@@ -657,7 +663,7 @@ zookeeper、mesos-master、mesos-sla">
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Mesos,net_cls,流控," />
 
 
 
@@ -92,7 +92,7 @@
 <meta property="og:image" content="https://github.com/SeptimusZhu/flink-related/blob/master/pic/rmp_net_cls_before.png?raw=true">
 <meta property="og:image" content="https://github.com/SeptimusZhu/flink-related/blob/master/pic/rmp_net_cls_classid.png?raw=true">
 <meta property="og:image" content="https://github.com/SeptimusZhu/flink-related/blob/master/pic/rmp_net_cls_after.png?raw=true">
-<meta property="og:updated_time" content="2017-05-27T03:43:38.000Z">
+<meta property="og:updated_time" content="2018-07-18T04:00:16.638Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mesos net_cls test">
 <meta name="twitter:description" content="1.mesos启动参数配置slave启动参数配置，增加net_cls
@@ -345,6 +345,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mesos/" itemprop="url" rel="index">
+                    <span itemprop="name">Mesos</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -380,6 +402,7 @@
         <h4 id="1-mesos启动参数配置"><a href="#1-mesos启动参数配置" class="headerlink" title="1.mesos启动参数配置"></a>1.mesos启动参数配置</h4><p>slave启动参数配置，增加net_cls</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo cgroups/cpu,cgroups/mem,cgroups/net_cls &gt; /etc/mesos-slave/isolation</div></pre></td></tr></table></figure>
 <p>增加mesos-slave启动参数<code>--cgroups_net_cls_primary_handle=0x0001</code>，可以通过修改<code>/usr/bin/mesos-init-wrapper</code>脚本实现，最终mesos-slave启动参数如下：</p>
+<a id="more"></a>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/sbin/mesos-slave --master=zk://10.120.177.85:2181,10.120.181.94:2181,10.120.180.209:2181/mesos --log_dir=/var/log/mesos --cgroups_net_cls_primary_handle=0x0001 --containerizers=mesos --isolation=cgroups/cpu,cgroups/mem,cgroups/net_cls --work_dir=/var/lib/meso</div></pre></td></tr></table></figure>
 <p>此时mesos会为每个容器分配一个16位的cgroups_net_cls_secondary_handle，和cgroups_net_cls_primary_handle(0x0001)一起组成一个classid。</p>
 <h4 id="2-启动应用"><a href="#2-启动应用" class="headerlink" title="2. 启动应用"></a>2. 启动应用</h4><p>使用marathon提交nc命令行应用，向对端发数据：</p>
@@ -407,6 +430,16 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mesos/" rel="tag"># Mesos</a>
+          
+            <a href="/tags/net-cls/" rel="tag"># net_cls</a>
+          
+            <a href="/tags/流控/" rel="tag"># 流控</a>
+          
+        </div>
       
 
       
@@ -513,7 +546,25 @@
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
             
 
           </nav>
@@ -573,7 +624,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
