@@ -85,7 +85,7 @@
 <meta property="og:url" content="http://septimuszhu.github.io/2018/07/17/Anti-GFW-guide/index.html">
 <meta property="og:site_name" content="Cien anos de soledad">
 <meta property="og:description" content="公司内网环境有美国代理，但Wi-Fi/4G环境是国内网络，使用Mac与手机时诸多不便，科学上网简要步骤记录如下">
-<meta property="og:updated_time" content="2018-09-11T12:19:01.760Z">
+<meta property="og:updated_time" content="2018-09-11T12:35:53.195Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Anti GFW guide">
 <meta name="twitter:description" content="公司内网环境有美国代理，但Wi-Fi/4G环境是国内网络，使用Mac与手机时诸多不便，科学上网简要步骤记录如下">
@@ -392,7 +392,7 @@
         <p>公司内网环境有美国代理，但Wi-Fi/4G环境是国内网络，使用Mac与手机时诸多不便，科学上网简要步骤记录如下</p>
 <a id="more"></a>
 <h4 id="ss服务器"><a href="#ss服务器" class="headerlink" title="ss服务器"></a>ss服务器</h4><p>购买vps或者ecs，国内外提供商都有，网上随便搜搜，各大云厂商有折扣就买，一个月几十块。<br>我之前用的是华为云香港区的ecs，选centos系统，KeyPair登陆，绑上弹性IP，安全组开放TCP入方向443端口。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">easy_install pip</div><div class="line">yum install git</div><div class="line">pip install git+https://github.com/shadowsocks/shadowsocks.git@master</div><div class="line">ssserver -p 443 -k yourpswd -m aes-256-cfb --user nobody -d start</div></pre></td></tr></table></figure></p>
-<p>vultr有25+3=28刀优惠，最便宜的ipv4机器每个月3.5刀，相当于免费用8个月，注册链接’<a href="https://www.vultr.com/promo25b?service=promo25b" target="_blank" rel="external">https://www.vultr.com/promo25b?service=promo25b</a>‘</p>
+<p>vultr有25+3=28刀优惠，最便宜的ipv4机器每个月3.5刀，相当于免费用8个月，注册链接<a href="https://www.vultr.com/promo25b?service=promo25b" target="_blank" rel="external">https://www.vultr.com/promo25b?service=promo25b</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">yum install net-tools</div><div class="line">wget -N --no-check certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; ./ssr.sh</div><div class="line">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh</div></pre></td></tr></table></figure>
 <h4 id="ss客户端"><a href="#ss客户端" class="headerlink" title="ss客户端"></a>ss客户端</h4><ul>
 <li><p>iPhone<br>我手机没越狱，在闲鱼买了个香港或者美国appleid，下载shadowrocket、kite、openwingy等软件，配置服务器ip密码加密方式即可</p>
