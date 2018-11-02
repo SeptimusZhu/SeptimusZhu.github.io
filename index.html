@@ -292,6 +292,161 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://septimuszhu.github.io/2018/10/31/Flink SQL 原理及使用入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhu Guodong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/13517038?s=460&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cien anos de soledad">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/31/Flink SQL 原理及使用入门/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-31T12:00:24+08:00">
+                2018-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Flink-SQL-原理及使用入门"><a href="#Flink-SQL-原理及使用入门" class="headerlink" title="Flink SQL 原理及使用入门"></a>Flink SQL 原理及使用入门</h1><blockquote>
+<p>基于Apache Flink 1.6.x</p>
+</blockquote>
+<h3 id="1-Get-Started"><a href="#1-Get-Started" class="headerlink" title="1 Get Started"></a>1 Get Started</h3><p>Flink SQL是Flink高层API，语法遵循ANSI SQL标准。示例如下</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> car_id, <span class="keyword">MAX</span>(speed), <span class="keyword">COUNT</span>(speed)</div><div class="line"><span class="keyword">FROM</span> drive_data</div><div class="line"><span class="keyword">WHERE</span> speed &gt; <span class="number">90</span></div><div class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> TUMBLE (proctime, <span class="built_in">INTERVAL</span> <span class="string">'30'</span> <span class="keyword">SECOND</span>), car_id</div></pre></td></tr></table></figure>
+<p>Flink SQL是在Flink Table API的基础上发展起来的，与上述示例对应的Table API示例如下</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">table.where(<span class="symbol">'speed</span> &gt; <span class="number">90</span>)</div><div class="line">  .window(<span class="type">Tumble</span> over <span class="number">30.</span>second on <span class="symbol">'proctime</span> as <span class="symbol">'w</span>)</div><div class="line">  .groupBy(<span class="symbol">'w</span>, <span class="symbol">'car_id</span>)</div><div class="line">  .select(<span class="symbol">'car_id</span>, <span class="symbol">'speed</span>.max, <span class="symbol">'speed</span>.count)</div></pre></td></tr></table></figure>
+<p>上述示例使用Scala代码，结合隐式转换和中缀表示等Scala语法，Table API代码看起来非常接近SQL表达。</p>
+<h3 id="2-架构原理"><a href="#2-架构原理" class="headerlink" title="2 架构原理"></a>2 架构原理</h3><p>老版本的Table API通过类似链式调用的写法，构造一棵Table Operator树，并对各个树节点做代码生成，转化成Flink低层API调用代码，即DataStream/DataSet API。</p>
+<p>从2016年开始，开源社区已经有大量SQL-on-Hadoop的成熟解决方案，包括Apache Hive、Apache Impala、Apache Drill等等，都依赖Apache Calcite提供的SQL解析优化能力，Apache Calcite当时已经是一个非常流行的业界标准SQL解析和优化框架。于此同时，随着在实时分析领域中Flink的应用场景增加，对SQL API的呼声渐高，于是社区开始在Apache Calcite的基础上构建新版本的Table API，并增加SQL API支持。</p>
+<p><img src="https://flink.apache.org/img/blog/stream-sql/new-table-api.png" alt="img"></p>
+<p>新版本的Table &amp; SQL API在原有的Table API基础上，由Calcite提供SQL解析和优化能力，将Table API调用和SQL查询统一转换成Calcite逻辑执行计划（Calcite RelNode树），并对此进行优化和代码生成，最终同样转化成Flink DataStream/DataSet API调用代码。</p>
+<h3 id="3-DDL-amp-DML"><a href="#3-DDL-amp-DML" class="headerlink" title="3 DDL &amp; DML"></a>3 DDL &amp; DML</h3><p>完整的SQL语法由DDL（data definition language）和DML（data manipulation language）两部分组成。Flink SQL目前只支持DML语法，而包含数据流定义的DDL语法仍需通过代码实现。</p>
+<p>国内各大公有云厂商中，阿里云和华为云提供了基于Flink SQL的实时流计算服务，各自定义了一套DDL语法，语法大同小异。以华为云为例，数据流定义以<code>CREATE STREAM</code>为关键字，具体的DDL写法示例如下</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">SOURCE</span> STREAM driver_behavior (car_id <span class="keyword">STRING</span>, speed <span class="built_in">INT</span>, collect_time <span class="keyword">LONG</span>)</div><div class="line"><span class="keyword">WITH</span> (</div><div class="line">  <span class="keyword">type</span> = <span class="string">"kafka"</span>,</div><div class="line">  kafka_bootstrap_servers = <span class="string">"10.10.10.10:3456,10.10.10.20:3456"</span>,</div><div class="line">  kafka_group_id = <span class="string">"group1"</span>,</div><div class="line">  kafka_topic = <span class="string">"topic1"</span>,</div><div class="line">  <span class="keyword">encode</span> = <span class="string">"csv"</span>,</div><div class="line">  field_delimiter = <span class="string">","</span></div><div class="line">) <span class="keyword">TIMESTAMP</span> <span class="keyword">BY</span> collect_time.ROWTIME;</div><div class="line"></div><div class="line"><span class="keyword">CREATE</span> SINK STREAM over_speed_warning (message <span class="keyword">STRING</span>)</div><div class="line"><span class="keyword">WITH</span> (</div><div class="line">  <span class="keyword">type</span> = <span class="string">"smn"</span>,</div><div class="line">  region = <span class="string">"cn-north-1"</span>,</div><div class="line">  topic_urn = <span class="string">"urn:smn:cn-north-1:38834633fd6f4bae813031b5985dbdea:warning"</span>,</div><div class="line">  message_subject = <span class="string">"title"</span>,</div><div class="line">  message_column = <span class="string">"message"</span></div><div class="line">);</div></pre></td></tr></table></figure>
+<p>DDL中包含输入数据流和输出数据流定义，描述实时流计算的数据上下游生态组件，在上述例子中，输入流（<code>SOURCE STREAM</code>）类型是Kafka，<code>WITH</code>子句描述了Kafka消费者相关配置。输出流（<code>SINK STREAM</code>）类型是SMN，是华为云消息通知服务的缩写，用于短信和邮件通知。</p>
+<p>数据从Kafka流入，向SMN服务流出，而中间的数据处理逻辑由DML实现，具体的DML写法示例如下</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> over_speed_warning</div><div class="line"><span class="keyword">SELECT</span> <span class="string">"your car speed ("</span> || <span class="keyword">CAST</span>(speed <span class="keyword">as</span> <span class="built_in">CHAR</span>(<span class="number">20</span>)) || <span class="string">") exceeds the maximum speed."</span></div><div class="line"><span class="keyword">FROM</span> (</div><div class="line">  <span class="keyword">SELECT</span> car_id, <span class="keyword">MAX</span>(speed) <span class="keyword">AS</span> speed, <span class="keyword">COUNT</span>(speed) <span class="keyword">AS</span> overspeed_count</div><div class="line">  <span class="keyword">FROM</span> driver_behavior</div><div class="line">  <span class="keyword">WHERE</span> speed &gt; <span class="number">90</span></div><div class="line">  <span class="keyword">GROUP</span> <span class="keyword">BY</span> TUMBLE (collect_time, <span class="built_in">INTERVAL</span> <span class="string">'30'</span> <span class="keyword">SECOND</span>), car_id</div><div class="line">)</div><div class="line"><span class="keyword">WHERE</span> overspeed_count &gt;= <span class="number">3</span>;</div></pre></td></tr></table></figure>
+<p>以上DML语句，描述了在30秒内车辆累计超速三次时，向作为输出流的下游SMN组件输出告警消息。DML语句中<code>INSERT INTO</code>关键字后紧接着输出流名，而<code>FROM</code>关键字后紧接着输入流名，<code>SELECT</code> 子句表达输出的内容，<code>WHERE</code>子句表达输出需要满足的过滤条件。上述例子使用到了SQL子查询，外层<code>FROM</code>后跟着一整个<code>SELECT</code>子句，为了方便理解，我们也可以把子查询语法转化成等价的临时流定义表达，在华为云实时流计算服务的DDL语法中支持了这种特性，与上述DML写法等价的示例如下</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> TEMP STREAM over_speed_info (car_id <span class="keyword">STRING</span>, speed <span class="built_in">INT</span>, overspeed_count <span class="built_in">INT</span>);</div><div class="line"></div><div class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> over_speed_info</div><div class="line"><span class="keyword">SELECT</span> car_id, <span class="keyword">MAX</span>(speed) <span class="keyword">AS</span> speed, <span class="keyword">COUNT</span>(speed) <span class="keyword">AS</span> overspeed_count</div><div class="line"><span class="keyword">FROM</span> driver_behavior</div><div class="line"><span class="keyword">WHERE</span> speed &gt; <span class="number">90</span></div><div class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> TUMBLE (collect_time, <span class="built_in">INTERVAL</span> <span class="string">'30'</span> <span class="keyword">SECOND</span>), car_id;</div><div class="line"></div><div class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> over_speed_warning</div><div class="line"><span class="keyword">SELECT</span> <span class="string">"your car speed ("</span> || <span class="keyword">CAST</span>(speed <span class="keyword">as</span> <span class="built_in">CHAR</span>(<span class="number">20</span>)) || <span class="string">") exceeds the maximum speed."</span></div><div class="line"><span class="keyword">FROM</span> over_speed_info</div><div class="line"><span class="keyword">WHERE</span> overspeed_count &gt;= <span class="number">3</span>;</div></pre></td></tr></table></figure>
+<p>通过<code>TEMP STREAM</code> 语法定义临时流，可以将带有子查询的SQL语法平铺表达，串接数据流逻辑，更容易理解。</p>
+<h3 id="4-语法"><a href="#4-语法" class="headerlink" title="4 语法"></a>4 语法</h3><p>Flink SQL的核心部分是DML语法，基础的DML语法包含笛卡尔积（单表情况下只有Scan操作）、选择（Filter）和投影（Projection）三个数据操作部分，三者分别对应<code>FROM</code>子句、<code>WHERE</code> 子句和<code>SELECT</code>子句，这三个部分的顺序代表了DML语句的逻辑执行顺序。较为进阶的语法包含聚合、窗口和连接（<code>JOIN</code>）等常用语法，以及排序、限制和集合等非常用语法。下表简单列举Flink SQL基础和常用的进阶DML语法句式并加以说明，其他语法元素和内建函数等详细内容，可参考<a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/sql.html" target="_blank" rel="external">Flink SQL文档</a></p>
+<ul>
+<li><p>基础语法</p>
+<p>| 操作                                | 样例                                                         |<br>| ———————————– | ———————————————————— |<br>| Scan  / Filter / Projection         | SELECT car_id, speed FROM drive_data WHERE speed &gt; 90        |<br>| Scan / FIlter / Projection / Insert | INSERT INTO overspeed SELECT id , speed FROM drive_data WHERE speed &gt; 90 |</p>
+</li>
+<li><p>聚合语法</p>
+<p>| 操作                       | 样例                                                         | 备注                                                         |<br>| ————————– | ———————————————————— | ———————————————————— |<br>| GroupBy Aggregation        | SELECT MAX(speed) FROM drive_data GROUP BY car_id            |                                                              |<br>| GroupBy Window Aggregation | SELECT car_id, MAX(speed) FROM drive_data GROUP BY TUMBLE(proctime, INTERVAL ‘1’ MINUTE), car_id | GroupBy窗口每个聚合周期输出一批聚合结果                      |<br>| Over Window Aggregation    | SELECT MAX(speed) OVER (  PARTITION BY car_id  ORDER BY proctime RANGE BETWEEN INTERVAL ‘30’ SECOND PRECEDING AND CURRENT ROW) FROM drive_data | Over窗口每进入一条数据就输出一条聚合结果，且所有的投影属性的Over窗口必须一致 |</p>
+</li>
+<li><p>连接语法</p>
+<p>| 操作               | 样例                                                         | 备注                                                         |<br>| —————— | ———————————————————— | ———————————————————— |<br>| Inner Euiq-join    | SELECT <em> FROM drive_data INNER JOIN car_info ON drive_data.car_id = car_info.id | 当前只支持等值连接                                           |<br>| Time-windowed Join | SELECT </em> FROM drive_data d, camera_data c WHERE d.car_id = c.car_id AND  d.proctime BETWEEN c.proctime - INTERVAL ‘30’ SECOND AND c.proctime |                                                              |<br>| Table Join         | SELECT * FROM drive_data INNER JOIN car_info ON drive_data.car_id = car_info.id | 流表Join语法和流流Join语法类似，Flink SQL目前不支持流表Join，阿里云和华为云实时流计算服务的SQL语法是支持的 |</p>
+</li>
+</ul>
+<h3 id="5-场景"><a href="#5-场景" class="headerlink" title="5 场景"></a>5 场景</h3><p>目前Flink SQL的应用场景主要包括ETL实时入库、实时大屏、实时告警等等。</p>
+<p><img src="https://s3.amazonaws.com/infoq.content.live.0/articles/flink-api-table-api-and-sql/zh/resources/2148-1535219231589.png" alt="img"></p>
+<p>在IoT领域和车联网领域也大量存在潜在的使用场景，华为云实时流计算服务提供了针对这些场景的SQL扩展，包括地理函数，CEP SQL等支持，还支持Streaming ML语法用SQL表达多种实时机器学习算法，包括随机森林算法实现异常检测等场景。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://septimuszhu.github.io/2018/07/17/Anti-GFW-guide/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1495,7 +1650,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
