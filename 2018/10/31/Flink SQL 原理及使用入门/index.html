@@ -2,14 +2,23 @@
 
 
 
+
+
+
+
+
+
+
+
+
   
 
 
-<html class="theme-next mist use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +29,6 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -38,9 +45,22 @@
 
 
 
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
 
 
 
@@ -48,69 +68,18 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
-
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="Flink,SQL,">
-
-
-
-
-
-
-
-
-
-
-<meta name="description" content="基于Apache Flink 1.6.x  1 Get StartedFlink SQL是Flink高层API，语法遵循ANSI SQL标准。示例如下 1234SELECT car_id, MAX(speed), COUNT(speed)FROM drive_dataWHERE speed &amp;gt; 90GROUP BY TUMBLE (proctime, INTERVAL &apos;30&apos; SECON">
-<meta name="keywords" content="Flink,SQL">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Flink SQL 原理及使用入门">
-<meta property="og:url" content="http://septimuszhu.github.io/2018/10/31/Flink SQL 原理及使用入门/index.html">
-<meta property="og:site_name" content="Cien años de soledad">
-<meta property="og:description" content="基于Apache Flink 1.6.x  1 Get StartedFlink SQL是Flink高层API，语法遵循ANSI SQL标准。示例如下 1234SELECT car_id, MAX(speed), COUNT(speed)FROM drive_dataWHERE speed &amp;gt; 90GROUP BY TUMBLE (proctime, INTERVAL &apos;30&apos; SECON">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://flink.apache.org/img/blog/stream-sql/new-table-api.png">
-<meta property="og:image" content="https://s3.amazonaws.com/infoq.content.live.0/articles/flink-api-table-api-and-sql/zh/resources/2148-1535219231589.png">
-<meta property="og:updated_time" content="2018-11-03T08:34:16.325Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Flink SQL 原理及使用入门">
-<meta name="twitter:description" content="基于Apache Flink 1.6.x  1 Get StartedFlink SQL是Flink高层API，语法遵循ANSI SQL标准。示例如下 1234SELECT car_id, MAX(speed), COUNT(speed)FROM drive_dataWHERE speed &amp;gt; 90GROUP BY TUMBLE (proctime, INTERVAL &apos;30&apos; SECON">
-<meta name="twitter:image" content="https://flink.apache.org/img/blog/stream-sql/new-table-api.png">
-
-
-
-<script type="text/javascript" id="hexo.configurations">
+<script id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
     scheme: 'Mist',
-    version: '5.1.4',
+    version: '6.7.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -122,12 +91,43 @@
 </script>
 
 
+  
+
+
+
+
+  <meta name="description" content="基于Apache Flink 1.6.x  1 Get Started Flink SQL是Flink高层API，语法遵循ANSI SQL标准。示例如下 1234SELECT car_id, MAX(speed), COUNT(speed)FROM drive_dataWHERE speed &amp;gt; 90GROUP BY TUMBLE (proctime, INTERVAL &apos;30&apos; SECO">
+<meta name="keywords" content="Flink,SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink SQL 原理及使用入门">
+<meta property="og:url" content="http://septimuszhu.github.io/2018/10/31/Flink SQL 原理及使用入门/index.html">
+<meta property="og:site_name" content="Cien años de soledad">
+<meta property="og:description" content="基于Apache Flink 1.6.x  1 Get Started Flink SQL是Flink高层API，语法遵循ANSI SQL标准。示例如下 1234SELECT car_id, MAX(speed), COUNT(speed)FROM drive_dataWHERE speed &amp;gt; 90GROUP BY TUMBLE (proctime, INTERVAL &apos;30&apos; SECO">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="https://flink.apache.org/img/blog/stream-sql/new-table-api.png">
+<meta property="og:image" content="https://s3.amazonaws.com/infoq.content.live.0/articles/flink-api-table-api-and-sql/zh/resources/2148-1535219231589.png">
+<meta property="og:updated_time" content="2019-01-02T08:04:10.395Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flink SQL 原理及使用入门">
+<meta name="twitter:description" content="基于Apache Flink 1.6.x  1 Get Started Flink SQL是Flink高层API，语法遵循ANSI SQL标准。示例如下 1234SELECT car_id, MAX(speed), COUNT(speed)FROM drive_dataWHERE speed &amp;gt; 90GROUP BY TUMBLE (proctime, INTERVAL &apos;30&apos; SECO">
+<meta name="twitter:image" content="https://flink.apache.org/img/blog/stream-sql/new-table-api.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Cien años de soledad" type="application/atom+xml">
+
+
+
 
   <link rel="canonical" href="http://septimuszhu.github.io/2018/10/31/Flink SQL 原理及使用入门/">
 
 
 
-
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
 
   <title>Flink SQL 原理及使用入门 | Cien años de soledad</title>
   
@@ -139,9 +139,38 @@
 
 
 
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh">
 
   
   
@@ -153,7 +182,7 @@
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
+  <div class="site-meta">
     
 
     <div class="custom-logo-site-title">
@@ -163,13 +192,16 @@
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
       
         <p class="site-subtitle">code trips and tips</p>
       
+    
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="Toggle navigation bar">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -177,76 +209,114 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
-            
-            归档
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
-            
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
-            
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
-            
-            关于
-          </a>
-        </li>
-      
+          
+          <li class="menu-item menu-item-home">
 
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+
+      
       
         <li class="menu-item menu-item-search">
           
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
-            
-            搜索
-          </a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
         </li>
       
     </ul>
+  
+
+  
+    
+
   
 
   
@@ -261,7 +331,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -275,12 +345,20 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
           <div id="content" class="content">
             
 
@@ -293,6 +371,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
   
   
@@ -303,7 +383,7 @@
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zhu Guodong">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/13517038?s=460&v=4">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -315,25 +395,51 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Flink SQL 原理及使用入门</h1>
+          <h1 class="post-title" itemprop="name headline">Flink SQL 原理及使用入门
+
+              
+            
+          </h1>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-31T12:00:24+08:00">
-                2018-10-31
-              </time>
+
+              
+                
+              
+
+              <time title="Created: 2018-10-31 14:38:54" itemprop="dateCreated datePublished" datetime="2018-10-31T14:38:54+08:00">2018-10-31</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-01-02 16:04:10" itemprop="dateModified" datetime="2019-01-02T16:04:10+08:00">2019-01-02</time>
+              
             
           </span>
 
@@ -346,14 +452,10 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Flink/" itemprop="url" rel="index">
-                    <span itemprop="name">Flink</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Flink/" itemprop="url" rel="index"><span itemprop="name">Flink</span></a></span>
 
                 
                 
@@ -370,7 +472,9 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             Views:  
             <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
             </span>
           
@@ -395,26 +499,30 @@
         <blockquote>
 <p>基于Apache Flink 1.6.x</p>
 </blockquote>
-<h3 id="1-Get-Started"><a href="#1-Get-Started" class="headerlink" title="1 Get Started"></a>1 Get Started</h3><p>Flink SQL是Flink高层API，语法遵循ANSI SQL标准。示例如下</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> car_id, <span class="keyword">MAX</span>(speed), <span class="keyword">COUNT</span>(speed)</div><div class="line"><span class="keyword">FROM</span> drive_data</div><div class="line"><span class="keyword">WHERE</span> speed &gt; <span class="number">90</span></div><div class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> TUMBLE (proctime, <span class="built_in">INTERVAL</span> <span class="string">'30'</span> <span class="keyword">SECOND</span>), car_id</div></pre></td></tr></table></figure>
+<h3 id="1-get-started">1 Get Started</h3>
+<p>Flink SQL是Flink高层API，语法遵循ANSI SQL标准。示例如下</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> car_id, <span class="keyword">MAX</span>(speed), <span class="keyword">COUNT</span>(speed)</span><br><span class="line"><span class="keyword">FROM</span> drive_data</span><br><span class="line"><span class="keyword">WHERE</span> speed &gt; <span class="number">90</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> TUMBLE (proctime, <span class="built_in">INTERVAL</span> <span class="string">'30'</span> <span class="keyword">SECOND</span>), car_id</span><br></pre></td></tr></table></figure>
 <p>Flink SQL是在Flink Table API的基础上发展起来的，与上述示例对应的Table API示例如下</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">table.where(<span class="symbol">'speed</span> &gt; <span class="number">90</span>)</div><div class="line">  .window(<span class="type">Tumble</span> over <span class="number">30.</span>second on <span class="symbol">'proctime</span> as <span class="symbol">'w</span>)</div><div class="line">  .groupBy(<span class="symbol">'w</span>, <span class="symbol">'car_id</span>)</div><div class="line">  .select(<span class="symbol">'car_id</span>, <span class="symbol">'speed</span>.max, <span class="symbol">'speed</span>.count)</div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">table.where(<span class="symbol">'speed</span> &gt; <span class="number">90</span>)</span><br><span class="line">  .window(<span class="type">Tumble</span> over <span class="number">30.</span>second on <span class="symbol">'proctime</span> as <span class="symbol">'w</span>)</span><br><span class="line">  .groupBy(<span class="symbol">'w</span>, <span class="symbol">'car_id</span>)</span><br><span class="line">  .select(<span class="symbol">'car_id</span>, <span class="symbol">'speed</span>.max, <span class="symbol">'speed</span>.count)</span><br></pre></td></tr></table></figure>
 <p>上述示例使用Scala代码，结合隐式转换和中缀表示等Scala语法，Table API代码看起来非常接近SQL表达。</p>
 <a id="more"></a>
-<h3 id="2-架构原理"><a href="#2-架构原理" class="headerlink" title="2 架构原理"></a>2 架构原理</h3><p>老版本的Table API通过类似链式调用的写法，构造一棵Table Operator树，并对各个树节点做代码生成，转化成Flink低层API调用代码，即DataStream/DataSet API。</p>
+<h3 id="2-架构原理">2 架构原理</h3>
+<p>老版本的Table API通过类似链式调用的写法，构造一棵Table Operator树，并对各个树节点做代码生成，转化成Flink低层API调用代码，即DataStream/DataSet API。</p>
 <p>从2016年开始，开源社区已经有大量SQL-on-Hadoop的成熟解决方案，包括Apache Hive、Apache Impala、Apache Drill等等，都依赖Apache Calcite提供的SQL解析优化能力，Apache Calcite当时已经是一个非常流行的业界标准SQL解析和优化框架。于此同时，随着在实时分析领域中Flink的应用场景增加，对SQL API的呼声渐高，于是社区开始在Apache Calcite的基础上构建新版本的Table API，并增加SQL API支持。</p>
 <p><img src="https://flink.apache.org/img/blog/stream-sql/new-table-api.png" alt="img"></p>
 <p>新版本的Table &amp; SQL API在原有的Table API基础上，由Calcite提供SQL解析和优化能力，将Table API调用和SQL查询统一转换成Calcite逻辑执行计划（Calcite RelNode树），并对此进行优化和代码生成，最终同样转化成Flink DataStream/DataSet API调用代码。</p>
-<h3 id="3-DDL-amp-DML"><a href="#3-DDL-amp-DML" class="headerlink" title="3 DDL &amp; DML"></a>3 DDL &amp; DML</h3><p>完整的SQL语法由DDL（data definition language）和DML（data manipulation language）两部分组成。Flink SQL目前只支持DML语法，而包含数据流定义的DDL语法仍需通过代码实现。</p>
+<h3 id="3-ddl-dml">3 DDL &amp; DML</h3>
+<p>完整的SQL语法由DDL（data definition language）和DML（data manipulation language）两部分组成。Flink SQL目前只支持DML语法，而包含数据流定义的DDL语法仍需通过代码实现。</p>
 <p>国内各大公有云厂商中，阿里云和华为云提供了基于Flink SQL的实时流计算服务，各自定义了一套DDL语法，语法大同小异。以华为云为例，数据流定义以<code>CREATE STREAM</code>为关键字，具体的DDL写法示例如下</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">SOURCE</span> STREAM driver_behavior (car_id <span class="keyword">STRING</span>, speed <span class="built_in">INT</span>, collect_time <span class="keyword">LONG</span>)</div><div class="line"><span class="keyword">WITH</span> (</div><div class="line">  <span class="keyword">type</span> = <span class="string">"kafka"</span>,</div><div class="line">  kafka_bootstrap_servers = <span class="string">"10.10.10.10:3456,10.10.10.20:3456"</span>,</div><div class="line">  kafka_group_id = <span class="string">"group1"</span>,</div><div class="line">  kafka_topic = <span class="string">"topic1"</span>,</div><div class="line">  <span class="keyword">encode</span> = <span class="string">"csv"</span>,</div><div class="line">  field_delimiter = <span class="string">","</span></div><div class="line">) <span class="keyword">TIMESTAMP</span> <span class="keyword">BY</span> collect_time.ROWTIME;</div><div class="line"></div><div class="line"><span class="keyword">CREATE</span> SINK STREAM over_speed_warning (message <span class="keyword">STRING</span>)</div><div class="line"><span class="keyword">WITH</span> (</div><div class="line">  <span class="keyword">type</span> = <span class="string">"smn"</span>,</div><div class="line">  region = <span class="string">"cn-north-1"</span>,</div><div class="line">  topic_urn = <span class="string">"urn:smn:cn-north-1:38834633fd6f4bae813031b5985dbdea:warning"</span>,</div><div class="line">  message_subject = <span class="string">"title"</span>,</div><div class="line">  message_column = <span class="string">"message"</span></div><div class="line">);</div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">SOURCE</span> STREAM driver_behavior (car_id <span class="keyword">STRING</span>, speed <span class="built_in">INT</span>, collect_time <span class="keyword">LONG</span>)</span><br><span class="line"><span class="keyword">WITH</span> (</span><br><span class="line">  <span class="keyword">type</span> = <span class="string">"kafka"</span>,</span><br><span class="line">  kafka_bootstrap_servers = <span class="string">"10.10.10.10:3456,10.10.10.20:3456"</span>,</span><br><span class="line">  kafka_group_id = <span class="string">"group1"</span>,</span><br><span class="line">  kafka_topic = <span class="string">"topic1"</span>,</span><br><span class="line">  <span class="keyword">encode</span> = <span class="string">"csv"</span>,</span><br><span class="line">  field_delimiter = <span class="string">","</span></span><br><span class="line">) <span class="built_in">TIMESTAMP</span> <span class="keyword">BY</span> collect_time.ROWTIME;</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> SINK STREAM over_speed_warning (message <span class="keyword">STRING</span>)</span><br><span class="line"><span class="keyword">WITH</span> (</span><br><span class="line">  <span class="keyword">type</span> = <span class="string">"smn"</span>,</span><br><span class="line">  region = <span class="string">"cn-north-1"</span>,</span><br><span class="line">  topic_urn = <span class="string">"urn:smn:cn-north-1:38834633fd6f4bae813031b5985dbdea:warning"</span>,</span><br><span class="line">  message_subject = <span class="string">"title"</span>,</span><br><span class="line">  message_column = <span class="string">"message"</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 <p>DDL中包含输入数据流和输出数据流定义，描述实时流计算的数据上下游生态组件，在上述例子中，输入流（<code>SOURCE STREAM</code>）类型是Kafka，<code>WITH</code>子句描述了Kafka消费者相关配置。输出流（<code>SINK STREAM</code>）类型是SMN，是华为云消息通知服务的缩写，用于短信和邮件通知。</p>
 <p>数据从Kafka流入，向SMN服务流出，而中间的数据处理逻辑由DML实现，具体的DML写法示例如下</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> over_speed_warning</div><div class="line"><span class="keyword">SELECT</span> <span class="string">"your car speed ("</span> || <span class="keyword">CAST</span>(speed <span class="keyword">as</span> <span class="built_in">CHAR</span>(<span class="number">20</span>)) || <span class="string">") exceeds the maximum speed."</span></div><div class="line"><span class="keyword">FROM</span> (</div><div class="line">  <span class="keyword">SELECT</span> car_id, <span class="keyword">MAX</span>(speed) <span class="keyword">AS</span> speed, <span class="keyword">COUNT</span>(speed) <span class="keyword">AS</span> overspeed_count</div><div class="line">  <span class="keyword">FROM</span> driver_behavior</div><div class="line">  <span class="keyword">WHERE</span> speed &gt; <span class="number">90</span></div><div class="line">  <span class="keyword">GROUP</span> <span class="keyword">BY</span> TUMBLE (collect_time, <span class="built_in">INTERVAL</span> <span class="string">'30'</span> <span class="keyword">SECOND</span>), car_id</div><div class="line">)</div><div class="line"><span class="keyword">WHERE</span> overspeed_count &gt;= <span class="number">3</span>;</div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> over_speed_warning</span><br><span class="line"><span class="keyword">SELECT</span> <span class="string">"your car speed ("</span> || <span class="keyword">CAST</span>(speed <span class="keyword">as</span> <span class="built_in">CHAR</span>(<span class="number">20</span>)) || <span class="string">") exceeds the maximum speed."</span></span><br><span class="line"><span class="keyword">FROM</span> (</span><br><span class="line">  <span class="keyword">SELECT</span> car_id, <span class="keyword">MAX</span>(speed) <span class="keyword">AS</span> speed, <span class="keyword">COUNT</span>(speed) <span class="keyword">AS</span> overspeed_count</span><br><span class="line">  <span class="keyword">FROM</span> driver_behavior</span><br><span class="line">  <span class="keyword">WHERE</span> speed &gt; <span class="number">90</span></span><br><span class="line">  <span class="keyword">GROUP</span> <span class="keyword">BY</span> TUMBLE (collect_time, <span class="built_in">INTERVAL</span> <span class="string">'30'</span> <span class="keyword">SECOND</span>), car_id</span><br><span class="line">)</span><br><span class="line"><span class="keyword">WHERE</span> overspeed_count &gt;= <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
 <p>以上DML语句，描述了在30秒内车辆累计超速三次时，向作为输出流的下游SMN组件输出告警消息。DML语句中<code>INSERT INTO</code>关键字后紧接着输出流名，而<code>FROM</code>关键字后紧接着输入流名，<code>SELECT</code> 子句表达输出的内容，<code>WHERE</code>子句表达输出需要满足的过滤条件。上述例子使用到了SQL子查询，外层<code>FROM</code>后跟着一整个<code>SELECT</code>子句，为了方便理解，我们也可以把子查询语法转化成等价的临时流定义表达，在华为云实时流计算服务的DDL语法中支持了这种特性，与上述DML写法等价的示例如下</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> TEMP STREAM over_speed_info (car_id <span class="keyword">STRING</span>, speed <span class="built_in">INT</span>, overspeed_count <span class="built_in">INT</span>);</div><div class="line"></div><div class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> over_speed_info</div><div class="line"><span class="keyword">SELECT</span> car_id, <span class="keyword">MAX</span>(speed) <span class="keyword">AS</span> speed, <span class="keyword">COUNT</span>(speed) <span class="keyword">AS</span> overspeed_count</div><div class="line"><span class="keyword">FROM</span> driver_behavior</div><div class="line"><span class="keyword">WHERE</span> speed &gt; <span class="number">90</span></div><div class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> TUMBLE (collect_time, <span class="built_in">INTERVAL</span> <span class="string">'30'</span> <span class="keyword">SECOND</span>), car_id;</div><div class="line"></div><div class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> over_speed_warning</div><div class="line"><span class="keyword">SELECT</span> <span class="string">"your car speed ("</span> || <span class="keyword">CAST</span>(speed <span class="keyword">as</span> <span class="built_in">CHAR</span>(<span class="number">20</span>)) || <span class="string">") exceeds the maximum speed."</span></div><div class="line"><span class="keyword">FROM</span> over_speed_info</div><div class="line"><span class="keyword">WHERE</span> overspeed_count &gt;= <span class="number">3</span>;</div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> TEMP STREAM over_speed_info (car_id <span class="keyword">STRING</span>, speed <span class="built_in">INT</span>, overspeed_count <span class="built_in">INT</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> over_speed_info</span><br><span class="line"><span class="keyword">SELECT</span> car_id, <span class="keyword">MAX</span>(speed) <span class="keyword">AS</span> speed, <span class="keyword">COUNT</span>(speed) <span class="keyword">AS</span> overspeed_count</span><br><span class="line"><span class="keyword">FROM</span> driver_behavior</span><br><span class="line"><span class="keyword">WHERE</span> speed &gt; <span class="number">90</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> TUMBLE (collect_time, <span class="built_in">INTERVAL</span> <span class="string">'30'</span> <span class="keyword">SECOND</span>), car_id;</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> over_speed_warning</span><br><span class="line"><span class="keyword">SELECT</span> <span class="string">"your car speed ("</span> || <span class="keyword">CAST</span>(speed <span class="keyword">as</span> <span class="built_in">CHAR</span>(<span class="number">20</span>)) || <span class="string">") exceeds the maximum speed."</span></span><br><span class="line"><span class="keyword">FROM</span> over_speed_info</span><br><span class="line"><span class="keyword">WHERE</span> overspeed_count &gt;= <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
 <p>通过<code>TEMP STREAM</code> 语法定义临时流，可以将带有子查询的SQL语法平铺表达，串接数据流逻辑，更容易理解。</p>
-<h3 id="4-语法"><a href="#4-语法" class="headerlink" title="4 语法"></a>4 语法</h3><p>Flink SQL的核心部分是DML语法，基础的DML语法包含笛卡尔积（单表情况下只有Scan操作）、选择（Filter）和投影（Projection）三个数据操作部分，三者分别对应<code>FROM</code>子句、<code>WHERE</code> 子句和<code>SELECT</code>子句，这三个部分的顺序代表了DML语句的逻辑执行顺序。较为进阶的语法包含聚合、窗口和连接（<code>JOIN</code>）等常用语法，以及排序、限制和集合等非常用语法。下表简单列举Flink SQL基础和常用的进阶DML语法句式并加以说明，其他语法元素和内建函数等详细内容，可参考<a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/sql.html" target="_blank" rel="external">Flink SQL文档</a></p>
+<h3 id="4-语法">4 语法</h3>
+<p>Flink SQL的核心部分是DML语法，基础的DML语法包含笛卡尔积（单表情况下只有Scan操作）、选择（Filter）和投影（Projection）三个数据操作部分，三者分别对应<code>FROM</code>子句、<code>WHERE</code> 子句和<code>SELECT</code>子句，这三个部分的顺序代表了DML语句的逻辑执行顺序。较为进阶的语法包含聚合、窗口和连接（<code>JOIN</code>）等常用语法，以及排序、限制和集合等非常用语法。下表简单列举Flink SQL基础和常用的进阶DML语法句式并加以说明，其他语法元素和内建函数等详细内容，可参考<a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/sql.html" target="_blank" rel="noopener">Flink SQL文档</a></p>
 <ul>
 <li>基础语法</li>
 </ul>
@@ -455,12 +563,12 @@
 </tr>
 <tr>
 <td style="text-align:left">GroupBy Window Aggregation</td>
-<td style="text-align:left">SELECT car_id, MAX(speed) FROM drive_data GROUP BY TUMBLE(proctime, INTERVAL ‘1’ MINUTE), car_id</td>
+<td style="text-align:left">SELECT car_id, MAX(speed) FROM drive_data GROUP BY TUMBLE(proctime, INTERVAL '1' MINUTE), car_id</td>
 <td style="text-align:left">GroupBy窗口每个聚合周期输出一批聚合结果</td>
 </tr>
 <tr>
 <td style="text-align:left">Over Window Aggregation</td>
-<td style="text-align:left">SELECT MAX(speed) OVER (  PARTITION BY car_id  ORDER BY proctime RANGE BETWEEN INTERVAL ‘30’ SECOND PRECEDING AND CURRENT ROW) FROM drive_data</td>
+<td style="text-align:left">SELECT MAX(speed) OVER (  PARTITION BY car_id  ORDER BY proctime RANGE BETWEEN INTERVAL '30' SECOND PRECEDING AND CURRENT ROW) FROM drive_data</td>
 <td style="text-align:left">Over窗口每进入一条数据就输出一条聚合结果，且所有的投影属性的Over窗口必须一致</td>
 </tr>
 </tbody>
@@ -484,7 +592,7 @@
 </tr>
 <tr>
 <td style="text-align:left">Time-windowed Join</td>
-<td style="text-align:left">SELECT * FROM drive_data d, camera_data c WHERE d.car_id = c.car_id AND  d.proctime BETWEEN c.proctime - INTERVAL ‘30’ SECOND AND c.proctime</td>
+<td style="text-align:left">SELECT * FROM drive_data d, camera_data c WHERE d.car_id = c.car_id AND  d.proctime BETWEEN c.proctime - INTERVAL '30' SECOND AND c.proctime</td>
 <td style="text-align:left"></td>
 </tr>
 <tr>
@@ -494,35 +602,47 @@
 </tr>
 </tbody>
 </table>
-<h3 id="5-场景"><a href="#5-场景" class="headerlink" title="5 场景"></a>5 场景</h3><p>目前Flink SQL的应用场景主要包括ETL实时入库、实时大屏、实时告警等等。</p>
+<h3 id="5-场景">5 场景</h3>
+<p>目前Flink SQL的应用场景主要包括ETL实时入库、实时大屏、实时告警等等。</p>
 <p><img src="https://s3.amazonaws.com/infoq.content.live.0/articles/flink-api-table-api-and-sql/zh/resources/2148-1535219231589.png" alt="img"></p>
 <p>在IoT领域和车联网领域也大量存在潜在的使用场景，华为云实时流计算服务提供了针对这些场景的SQL扩展，包括地理函数，CEP SQL等支持，还支持Streaming ML语法用SQL表达多种实时机器学习算法，包括随机森林算法实现异常检测等场景。</p>
 
       
     </div>
+
+    
+
     
     
     
 
     
 
+    
+      
+    
     
 
     
       <div>
-        <ul class="post-copyright">
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
   <li class="post-copyright-author">
-    <strong>本文作者：</strong>
-    Zhu Guodong
-  </li>
+    <strong>Post author:  </strong>Zhu Guodong</li>
   <li class="post-copyright-link">
-    <strong>本文链接：</strong>
+    <strong>Post link: </strong>
+    
     <a href="http://septimuszhu.github.io/2018/10/31/Flink SQL 原理及使用入门/" title="Flink SQL 原理及使用入门">http://septimuszhu.github.io/2018/10/31/Flink SQL 原理及使用入门/</a>
   </li>
   <li class="post-copyright-license">
-    <strong>版权声明： </strong>
-    本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/" rel="external nofollow" target="_blank">CC BY 4.0</a> 许可协议。转载请注明出处！
-  </li>
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
 </ul>
 
       </div>
@@ -571,17 +691,10 @@
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
           </div>
-          
-
-
           
 
   
@@ -609,107 +722,157 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
+            Overview
           </li>
         </ul>
       
 
-      <section class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image" src="https://avatars1.githubusercontent.com/u/13517038?s=460&v=4" alt="Zhu Guodong">
             
               <p class="site-author-name" itemprop="name">Zhu Guodong</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/archives/">
-              
-                  <span class="site-state-item-count">9</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
-                  <span class="site-state-item-name">分类</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
-                  <span class="site-state-item-name">标签</span>
-                </a>
-              </div>
-            
-
-          </nav>
-
           
-
-          
-            <div class="links-of-author motion-element">
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
                 
-                  <span class="links-of-author-item">
-                    <a href="https://github.com/SeptimusZhu" target="_blank" title="GitHub">
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
                       
-                        <i class="fa fa-fw fa-github"></i>GitHub</a>
-                  </span>
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
                 
-            </div>
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
           
 
           
-          
-            <div class="cc-license motion-element" itemprop="license">
-              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
               </a>
             </div>
           
 
           
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/SeptimusZhu" title="GitHub &rarr; https://github.com/SeptimusZhu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            </div>
           
 
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
           
 
         </div>
-      </section>
+      </div>
 
       
       <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
 
             
-              
+            
+            
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Get-Started"><span class="nav-number">1.</span> <span class="nav-text">1 Get Started</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-架构原理"><span class="nav-number">2.</span> <span class="nav-text">2 架构原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-DDL-amp-DML"><span class="nav-number">3.</span> <span class="nav-text">3 DDL &amp; DML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-语法"><span class="nav-number">4.</span> <span class="nav-text">4 语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-场景"><span class="nav-number">5.</span> <span class="nav-text">5 场景</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-get-started"><span class="nav-number">1.</span> <span class="nav-text">1 Get Started</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-架构原理"><span class="nav-number">2.</span> <span class="nav-text">2 架构原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-ddl-dml"><span class="nav-number">3.</span> <span class="nav-text">3 DDL &amp; DML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-语法"><span class="nav-number">4.</span> <span class="nav-text">4 语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-场景"><span class="nav-number">5.</span> <span class="nav-text">5 场景</span></a></li></ol></div>
             
 
           </div>
-        </section>
+        </div>
       <!--/noindex-->
       
 
@@ -725,17 +888,19 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Zhu Guodong</span>
 
   
+
+  
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
 
 
 
@@ -743,31 +908,30 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v6.7.0</div>
 
 
 
 
         
 <div class="busuanzi-count">
-  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
   
-    <span class="site-uv">
+    <span class="site-uv" title="Total Visitors">
       <i class="fa fa-user"></i>
       <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
-      
     </span>
   
 
   
-    <span class="site-pv">
+    <span class="site-pv" title="Total Views">
       <i class="fa fa-eye"></i>
       <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
-      
     </span>
   
 </div>
+
 
 
 
@@ -789,11 +953,14 @@
 
     
 
+    
+
+    
   </div>
 
   
 
-<script type="text/javascript">
+<script>
   if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
     window.Promise = null;
   }
@@ -807,7 +974,6 @@
 
 
 
-  
 
 
 
@@ -820,43 +986,27 @@
 
 
 
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
+
+
+
+
 
   
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
 
   
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+  <script src="/js/src/utils.js?v=6.7.0"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+  <script src="/js/src/motion.js?v=6.7.0"></script>
 
 
 
@@ -864,35 +1014,19 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
 
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
 
 
 
   
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
 
 
 
@@ -908,10 +1042,9 @@
 
 
 
-
   
 
-  <script type="text/javascript">
+  <script>
     // Popup Window;
     var isfetched = false;
     var isXml = true;
@@ -960,6 +1093,8 @@
         .css('overflow', 'hidden');
       $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
 
+      
+
       $.ajax({
         url: path,
         dataType: isXml ? "xml" : "json",
@@ -993,8 +1128,9 @@
                 var title = data.title.trim();
                 var titleInLowerCase = title.toLowerCase();
                 var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
                 var contentInLowerCase = content.toLowerCase();
-                var articleUrl = decodeURIComponent(data.url);
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
                 var indexOfTitle = [];
                 var indexOfContent = [];
                 // only match articles with not empty titles
@@ -1163,9 +1299,9 @@
               })
             };
             if (keywords.length === 1 && keywords[0] === "") {
-              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
             } else if (resultItems.length === 0) {
-              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
             } else {
               resultItems.sort(function (resultLeft, resultRight) {
                 if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
@@ -1239,6 +1375,17 @@
   
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
   
 
   

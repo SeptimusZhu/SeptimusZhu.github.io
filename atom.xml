@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Cien años de soledad</title>
+  
+  <subtitle>code trips and tips</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://septimuszhu.github.io/"/>
+  <updated>2019-01-02T08:04:10.395Z</updated>
+  <id>http://septimuszhu.github.io/</id>
+  
+  <author>
+    <name>Zhu Guodong</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Flink SQL 原理及使用入门</title>
+    <link href="http://septimuszhu.github.io/2018/10/31/Flink%20SQL%20%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8/"/>
+    <id>http://septimuszhu.github.io/2018/10/31/Flink SQL 原理及使用入门/</id>
+    <published>2018-10-31T06:38:54.000Z</published>
+    <updated>2019-01-02T08:04:10.395Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;基于Apache Flink 1.6.x&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;1-get-started&quot;&gt;1 Get Started&lt;/h3&gt;
+&lt;p&gt;Flink SQL是Flink高层API，语法遵循ANSI SQL标准。示例如下&lt;/p&gt;
+&lt;figure class=&quot;highlight sql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;SELECT&lt;/span&gt; car_id, &lt;span class=&quot;keyword&quot;&gt;MAX&lt;/span&gt;(speed), &lt;span class=&quot;keyword&quot;&gt;COUNT&lt;/span&gt;(speed)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;FROM&lt;/span&gt; drive_data&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;WHERE&lt;/span&gt; speed &amp;gt; &lt;span class=&quot;number&quot;&gt;90&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;GROUP&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;BY&lt;/span&gt; TUMBLE (proctime, &lt;span class=&quot;built_in&quot;&gt;INTERVAL&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&#39;30&#39;&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;SECOND&lt;/span&gt;), car_id&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;Flink SQL是在Flink Table API的基础上发展起来的，与上述示例对应的Table API示例如下&lt;/p&gt;
+&lt;figure class=&quot;highlight scala&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;table.where(&lt;span class=&quot;symbol&quot;&gt;&#39;speed&lt;/span&gt; &amp;gt; &lt;span class=&quot;number&quot;&gt;90&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  .window(&lt;span class=&quot;type&quot;&gt;Tumble&lt;/span&gt; over &lt;span class=&quot;number&quot;&gt;30.&lt;/span&gt;second on &lt;span class=&quot;symbol&quot;&gt;&#39;proctime&lt;/span&gt; as &lt;span class=&quot;symbol&quot;&gt;&#39;w&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  .groupBy(&lt;span class=&quot;symbol&quot;&gt;&#39;w&lt;/span&gt;, &lt;span class=&quot;symbol&quot;&gt;&#39;car_id&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  .select(&lt;span class=&quot;symbol&quot;&gt;&#39;car_id&lt;/span&gt;, &lt;span class=&quot;symbol&quot;&gt;&#39;speed&lt;/span&gt;.max, &lt;span class=&quot;symbol&quot;&gt;&#39;speed&lt;/span&gt;.count)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;上述示例使用Scala代码，结合隐式转换和中缀表示等Scala语法，Table API代码看起来非常接近SQL表达。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Flink" scheme="http://septimuszhu.github.io/categories/Flink/"/>
+    
+    
+      <category term="Flink" scheme="http://septimuszhu.github.io/tags/Flink/"/>
+    
+      <category term="SQL" scheme="http://septimuszhu.github.io/tags/SQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Anti GFW guide</title>
+    <link href="http://septimuszhu.github.io/2018/07/17/Anti-GFW-guide/"/>
+    <id>http://septimuszhu.github.io/2018/07/17/Anti-GFW-guide/</id>
+    <published>2018-07-17T06:38:54.000Z</published>
+    <updated>2019-01-02T07:11:06.621Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;公司内网环境有美国代理，但Wi-Fi/4G环境是国内网络，使用Mac与手机时诸多不便，科学上网简要步骤记录如下&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="科学上网" scheme="http://septimuszhu.github.io/categories/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/"/>
+    
+    
+      <category term="GFW" scheme="http://septimuszhu.github.io/tags/GFW/"/>
+    
+      <category term="shadowsocks" scheme="http://septimuszhu.github.io/tags/shadowsocks/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mesos net_cls test</title>
+    <link href="http://septimuszhu.github.io/2017/05/27/mesos-net-cls-test/"/>
+    <id>http://septimuszhu.github.io/2017/05/27/mesos-net-cls-test/</id>
+    <published>2017-05-27T03:38:04.000Z</published>
+    <updated>2019-01-02T07:11:06.619Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;1-mesos启动参数配置&quot;&gt;1.mesos启动参数配置&lt;/h4&gt;
+&lt;p&gt;slave启动参数配置，增加net_cls&lt;/p&gt;
+&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;echo cgroups/cpu,cgroups/mem,cgroups/net_cls &amp;gt; /etc/mesos-slave/isolation&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;增加mesos-slave启动参数&lt;code&gt;--cgroups_net_cls_primary_handle=0x0001&lt;/code&gt;，可以通过修改&lt;code&gt;/usr/bin/mesos-init-wrapper&lt;/code&gt;脚本实现，最终mesos-slave启动参数如下：&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Mesos" scheme="http://septimuszhu.github.io/categories/Mesos/"/>
+    
+    
+      <category term="Mesos" scheme="http://septimuszhu.github.io/tags/Mesos/"/>
+    
+      <category term="net_cls" scheme="http://septimuszhu.github.io/tags/net-cls/"/>
+    
+      <category term="流控" scheme="http://septimuszhu.github.io/tags/%E6%B5%81%E6%8E%A7/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Get Started with Flink on top of Mesos Marathon</title>
+    <link href="http://septimuszhu.github.io/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/"/>
+    <id>http://septimuszhu.github.io/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/</id>
+    <published>2017-04-24T14:57:11.000Z</published>
+    <updated>2019-01-02T07:11:06.623Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Based on CentOS 7&lt;/p&gt;
+&lt;h3 id=&quot;准备&quot;&gt;准备&lt;/h3&gt;
+&lt;h4 id=&quot;rpm安装包准备&quot;&gt;rpm安装包准备&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;http://dl.marmotte.net/rpms/redhat/el7/x86_64/zookeeper-3.4.9-3.el7/zookeeper-3.4.9-3.el7.noarch.rpm&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;zookeeper&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://repos.mesosphere.com/el/7/x86_64/RPMS/mesos-1.1.0-2.0.107.centos701406.x86_64.rpm&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;mesos&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://repos.mesosphere.com/el-testing/6/x86_64/RPMS/marathon-1.4.0-1.0.560.el6.x86_64.rpm&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;marathon&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Flink" scheme="http://septimuszhu.github.io/categories/Flink/"/>
+    
+    
+      <category term="Mesos" scheme="http://septimuszhu.github.io/tags/Mesos/"/>
+    
+      <category term="Marathon" scheme="http://septimuszhu.github.io/tags/Marathon/"/>
+    
+      <category term="Flink" scheme="http://septimuszhu.github.io/tags/Flink/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>deploy flink on mesos marathon</title>
+    <link href="http://septimuszhu.github.io/2017/04/12/deploy-flink-on-mesos-marathon/"/>
+    <id>http://septimuszhu.github.io/2017/04/12/deploy-flink-on-mesos-marathon/</id>
+    <published>2017-04-12T14:08:38.000Z</published>
+    <updated>2019-01-02T07:11:06.622Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;mesos部署&quot;&gt;Mesos部署&lt;/h2&gt;
+&lt;h4 id=&quot;1-下载安装&quot;&gt;1.下载安装&lt;/h4&gt;
+&lt;p&gt;从官网下载Mesos的rpm安装包（&lt;a href=&quot;http://repos.mesosphere.com/el/7/x86_64/RPMS/mesos-1.1.0-2.0.107.centos701406.x86_64.rpm&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;下载链接&lt;/a&gt;）并在所有集群节点中安装mesos&lt;/p&gt;
+&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;rpm -ivh mesos-1.1.0*.rpm&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;注：可能会报libevent-devel依赖未安装，使用命令&lt;code&gt;yum install libevent libevent-devel -y&lt;/code&gt;安装&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Flink" scheme="http://septimuszhu.github.io/categories/Flink/"/>
+    
+    
+      <category term="Mesos" scheme="http://septimuszhu.github.io/tags/Mesos/"/>
+    
+      <category term="Marathon" scheme="http://septimuszhu.github.io/tags/Marathon/"/>
+    
+      <category term="Flink" scheme="http://septimuszhu.github.io/tags/Flink/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>tips in Functional Programming in Scala</title>
+    <link href="http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/"/>
+    <id>http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/</id>
+    <published>2017-04-06T06:38:54.000Z</published>
+    <updated>2019-01-02T08:05:14.111Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;s&gt;update everyday&lt;/s&gt;(maybe weekly)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;partial application&lt;/p&gt;
+  &lt;figure class=&quot;highlight scala&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gut
+      
+    
+    </summary>
+    
+      <category term="Scala" scheme="http://septimuszhu.github.io/categories/Scala/"/>
+    
+    
+      <category term="Scala" scheme="http://septimuszhu.github.io/tags/Scala/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Libprocess concepts</title>
+    <link href="http://septimuszhu.github.io/2017/03/29/libprocess-tips/"/>
+    <id>http://septimuszhu.github.io/2017/03/29/libprocess-tips/</id>
+    <published>2017-03-29T06:38:54.000Z</published>
+    <updated>2019-01-02T08:05:39.274Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;先看官方定义：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Library that provides an actor style message-passing programming model (in C++).&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;mesos代码中大篇幅引用libprocess，其中定义了大量异步编程的原语，包括future、promise这些在c++11中也有的概念，onReady、onAny等回调注册接口，以及then串接异步调用等等强大功能。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Mesos" scheme="http://septimuszhu.github.io/categories/Mesos/"/>
+    
+    
+      <category term="libprocess" scheme="http://septimuszhu.github.io/tags/libprocess/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Mesos Containerizer</title>
+    <link href="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/"/>
+    <id>http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/</id>
+    <published>2017-03-24T06:38:54.000Z</published>
+    <updated>2019-01-02T08:06:05.412Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Mesos Containerizer是mesos agent的关键部件，提供容器化所需的服务。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;位于agent和容器之间&lt;/li&gt;
+&lt;li&gt;启动、更新和销毁容器&lt;/li&gt;
+&lt;li&gt;提供容器间的隔离&lt;/li&gt;
+&lt;li&gt;上报容器状态&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="Mesos" scheme="http://septimuszhu.github.io/categories/Mesos/"/>
+    
+    
+      <category term="Mesos" scheme="http://septimuszhu.github.io/tags/Mesos/"/>
+    
+      <category term="容器" scheme="http://septimuszhu.github.io/tags/%E5%AE%B9%E5%99%A8/"/>
+    
+  </entry>
+  
+</feed>
