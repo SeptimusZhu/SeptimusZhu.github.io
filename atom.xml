@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://septimuszhu.github.io/"/>
-  <updated>2019-01-28T08:39:49.189Z</updated>
+  <updated>2019-01-28T08:44:40.297Z</updated>
   <id>http://septimuszhu.github.io/</id>
   
   <author>
@@ -21,12 +21,11 @@
     <link href="http://septimuszhu.github.io/2019/01/28/driver-behavior-analysis/"/>
     <id>http://septimuszhu.github.io/2019/01/28/driver-behavior-analysis/</id>
     <published>2019-01-28T08:38:54.000Z</published>
-    <updated>2019-01-28T08:39:49.189Z</updated>
+    <updated>2019-01-28T08:44:40.297Z</updated>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;none&quot;&gt;&lt;/h2&gt;
-&lt;h4 id=&quot;概述&quot;&gt;概述&lt;/h4&gt;
+      &lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
 &lt;p&gt;通过车载设备、用户手机和穿戴设备的传感器，获取车辆和驾驶员相关数据，通过数据分析模型和大数据实时计算等手段，对驾驶行为和驾驶技术进行实时监测和智能评估，对于交通事故减少、驾驶技术提升，以及UBI定价等方面，都有重要的参考价值。从社会环境和经济价值上看，降低行车事故发生率，降低车辆保费和燃油成本，这些方面都是积极正面的。&lt;/p&gt;
     
     </summary>
