@@ -2,84 +2,84 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://septimus.ml/2018/10/31/Flink%20SQL%20%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8/</loc>
+    <loc>http://septimuszhu.github.io/2018/10/31/Flink%20SQL%20%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8/</loc>
     
     <lastmod>2019-02-01T01:51:51.845Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://septimus.ml/2019/01/28/driver-behavior-analysis/</loc>
+    <loc>http://septimuszhu.github.io/2019/01/28/driver-behavior-analysis/</loc>
     
     <lastmod>2019-01-28T08:44:40.297Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://septimus.ml/2017/03/24/mesos-containerizer-tips/</loc>
+    <loc>http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/</loc>
     
     <lastmod>2019-01-02T08:06:05.412Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://septimus.ml/2017/03/29/libprocess-tips/</loc>
+    <loc>http://septimuszhu.github.io/2017/03/29/libprocess-tips/</loc>
     
     <lastmod>2019-01-02T08:05:39.274Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://septimus.ml/2017/04/06/functional-programming-in-scala-tips/</loc>
+    <loc>http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/</loc>
     
     <lastmod>2019-01-02T08:05:14.111Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://septimus.ml/categories/index.html</loc>
+    <loc>http://septimuszhu.github.io/categories/index.html</loc>
     
     <lastmod>2019-01-02T07:11:06.626Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://septimus.ml/about/index.html</loc>
+    <loc>http://septimuszhu.github.io/tags/index.html</loc>
     
     <lastmod>2019-01-02T07:11:06.625Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://septimus.ml/tags/index.html</loc>
+    <loc>http://septimuszhu.github.io/about/index.html</loc>
     
     <lastmod>2019-01-02T07:11:06.625Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://septimus.ml/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/</loc>
+    <loc>http://septimuszhu.github.io/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/</loc>
     
     <lastmod>2019-01-02T07:11:06.623Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://septimus.ml/2017/04/12/deploy-flink-on-mesos-marathon/</loc>
+    <loc>http://septimuszhu.github.io/2017/04/12/deploy-flink-on-mesos-marathon/</loc>
     
     <lastmod>2019-01-02T07:11:06.622Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://septimus.ml/2018/07/17/Anti-GFW-guide/</loc>
+    <loc>http://septimuszhu.github.io/2018/07/17/Anti-GFW-guide/</loc>
     
     <lastmod>2019-01-02T07:11:06.621Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://septimus.ml/2017/05/27/mesos-net-cls-test/</loc>
+    <loc>http://septimuszhu.github.io/2017/05/27/mesos-net-cls-test/</loc>
     
     <lastmod>2019-01-02T07:11:06.619Z</lastmod>
     

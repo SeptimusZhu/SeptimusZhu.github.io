@@ -5,9 +5,9 @@
   <subtitle>code trips and tips</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://septimus.ml/"/>
+  <link href="http://septimuszhu.github.io/"/>
   <updated>2019-01-28T08:44:40.297Z</updated>
-  <id>http://septimus.ml/</id>
+  <id>http://septimuszhu.github.io/</id>
   
   <author>
     <name>Zhu Guodong</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>驾驶行为分析</title>
-    <link href="http://septimus.ml/2019/01/28/driver-behavior-analysis/"/>
-    <id>http://septimus.ml/2019/01/28/driver-behavior-analysis/</id>
+    <link href="http://septimuszhu.github.io/2019/01/28/driver-behavior-analysis/"/>
+    <id>http://septimuszhu.github.io/2019/01/28/driver-behavior-analysis/</id>
     <published>2019-01-28T08:38:54.000Z</published>
     <updated>2019-01-28T08:44:40.297Z</updated>
     
@@ -32,19 +32,19 @@
     
     </summary>
     
-      <category term="Vehicle" scheme="http://septimus.ml/categories/Vehicle/"/>
+      <category term="Vehicle" scheme="http://septimuszhu.github.io/categories/Vehicle/"/>
     
     
-      <category term="driver behavior" scheme="http://septimus.ml/tags/driver-behavior/"/>
+      <category term="driver behavior" scheme="http://septimuszhu.github.io/tags/driver-behavior/"/>
     
-      <category term="AI" scheme="http://septimus.ml/tags/AI/"/>
+      <category term="AI" scheme="http://septimuszhu.github.io/tags/AI/"/>
     
   </entry>
   
   <entry>
     <title>Flink SQL 原理及使用入门</title>
-    <link href="http://septimus.ml/2018/10/31/Flink%20SQL%20%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8/"/>
-    <id>http://septimus.ml/2018/10/31/Flink SQL 原理及使用入门/</id>
+    <link href="http://septimuszhu.github.io/2018/10/31/Flink%20SQL%20%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8/"/>
+    <id>http://septimuszhu.github.io/2018/10/31/Flink SQL 原理及使用入门/</id>
     <published>2018-10-31T06:38:54.000Z</published>
     <updated>2019-02-01T01:51:51.845Z</updated>
     
@@ -64,19 +64,19 @@
     
     </summary>
     
-      <category term="Flink" scheme="http://septimus.ml/categories/Flink/"/>
+      <category term="Flink" scheme="http://septimuszhu.github.io/categories/Flink/"/>
     
     
-      <category term="Flink" scheme="http://septimus.ml/tags/Flink/"/>
+      <category term="Flink" scheme="http://septimuszhu.github.io/tags/Flink/"/>
     
-      <category term="SQL" scheme="http://septimus.ml/tags/SQL/"/>
+      <category term="SQL" scheme="http://septimuszhu.github.io/tags/SQL/"/>
     
   </entry>
   
   <entry>
     <title>Anti GFW guide</title>
-    <link href="http://septimus.ml/2018/07/17/Anti-GFW-guide/"/>
-    <id>http://septimus.ml/2018/07/17/Anti-GFW-guide/</id>
+    <link href="http://septimuszhu.github.io/2018/07/17/Anti-GFW-guide/"/>
+    <id>http://septimuszhu.github.io/2018/07/17/Anti-GFW-guide/</id>
     <published>2018-07-17T06:38:54.000Z</published>
     <updated>2019-01-02T07:11:06.621Z</updated>
     
@@ -88,19 +88,19 @@
     
     </summary>
     
-      <category term="科学上网" scheme="http://septimus.ml/categories/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/"/>
+      <category term="科学上网" scheme="http://septimuszhu.github.io/categories/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/"/>
     
     
-      <category term="GFW" scheme="http://septimus.ml/tags/GFW/"/>
+      <category term="GFW" scheme="http://septimuszhu.github.io/tags/GFW/"/>
     
-      <category term="shadowsocks" scheme="http://septimus.ml/tags/shadowsocks/"/>
+      <category term="shadowsocks" scheme="http://septimuszhu.github.io/tags/shadowsocks/"/>
     
   </entry>
   
   <entry>
     <title>mesos net_cls test</title>
-    <link href="http://septimus.ml/2017/05/27/mesos-net-cls-test/"/>
-    <id>http://septimus.ml/2017/05/27/mesos-net-cls-test/</id>
+    <link href="http://septimuszhu.github.io/2017/05/27/mesos-net-cls-test/"/>
+    <id>http://septimuszhu.github.io/2017/05/27/mesos-net-cls-test/</id>
     <published>2017-05-27T03:38:04.000Z</published>
     <updated>2019-01-02T07:11:06.619Z</updated>
     
@@ -115,21 +115,21 @@
     
     </summary>
     
-      <category term="Mesos" scheme="http://septimus.ml/categories/Mesos/"/>
+      <category term="Mesos" scheme="http://septimuszhu.github.io/categories/Mesos/"/>
     
     
-      <category term="Mesos" scheme="http://septimus.ml/tags/Mesos/"/>
+      <category term="Mesos" scheme="http://septimuszhu.github.io/tags/Mesos/"/>
     
-      <category term="net_cls" scheme="http://septimus.ml/tags/net-cls/"/>
+      <category term="net_cls" scheme="http://septimuszhu.github.io/tags/net-cls/"/>
     
-      <category term="流控" scheme="http://septimus.ml/tags/%E6%B5%81%E6%8E%A7/"/>
+      <category term="流控" scheme="http://septimuszhu.github.io/tags/%E6%B5%81%E6%8E%A7/"/>
     
   </entry>
   
   <entry>
     <title>Get Started with Flink on top of Mesos Marathon</title>
-    <link href="http://septimus.ml/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/"/>
-    <id>http://septimus.ml/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/</id>
+    <link href="http://septimuszhu.github.io/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/"/>
+    <id>http://septimuszhu.github.io/2017/04/24/get-started-with-flink-on-top-of-mesos-marathon/</id>
     <published>2017-04-24T14:57:11.000Z</published>
     <updated>2019-01-02T07:11:06.623Z</updated>
     
@@ -146,21 +146,21 @@
     
     </summary>
     
-      <category term="Flink" scheme="http://septimus.ml/categories/Flink/"/>
+      <category term="Flink" scheme="http://septimuszhu.github.io/categories/Flink/"/>
     
     
-      <category term="Mesos" scheme="http://septimus.ml/tags/Mesos/"/>
+      <category term="Mesos" scheme="http://septimuszhu.github.io/tags/Mesos/"/>
     
-      <category term="Marathon" scheme="http://septimus.ml/tags/Marathon/"/>
+      <category term="Marathon" scheme="http://septimuszhu.github.io/tags/Marathon/"/>
     
-      <category term="Flink" scheme="http://septimus.ml/tags/Flink/"/>
+      <category term="Flink" scheme="http://septimuszhu.github.io/tags/Flink/"/>
     
   </entry>
   
   <entry>
     <title>deploy flink on mesos marathon</title>
-    <link href="http://septimus.ml/2017/04/12/deploy-flink-on-mesos-marathon/"/>
-    <id>http://septimus.ml/2017/04/12/deploy-flink-on-mesos-marathon/</id>
+    <link href="http://septimuszhu.github.io/2017/04/12/deploy-flink-on-mesos-marathon/"/>
+    <id>http://septimuszhu.github.io/2017/04/12/deploy-flink-on-mesos-marathon/</id>
     <published>2017-04-12T14:08:38.000Z</published>
     <updated>2019-01-02T07:11:06.622Z</updated>
     
@@ -176,21 +176,21 @@
     
     </summary>
     
-      <category term="Flink" scheme="http://septimus.ml/categories/Flink/"/>
+      <category term="Flink" scheme="http://septimuszhu.github.io/categories/Flink/"/>
     
     
-      <category term="Mesos" scheme="http://septimus.ml/tags/Mesos/"/>
+      <category term="Mesos" scheme="http://septimuszhu.github.io/tags/Mesos/"/>
     
-      <category term="Marathon" scheme="http://septimus.ml/tags/Marathon/"/>
+      <category term="Marathon" scheme="http://septimuszhu.github.io/tags/Marathon/"/>
     
-      <category term="Flink" scheme="http://septimus.ml/tags/Flink/"/>
+      <category term="Flink" scheme="http://septimuszhu.github.io/tags/Flink/"/>
     
   </entry>
   
   <entry>
     <title>tips in Functional Programming in Scala</title>
-    <link href="http://septimus.ml/2017/04/06/functional-programming-in-scala-tips/"/>
-    <id>http://septimus.ml/2017/04/06/functional-programming-in-scala-tips/</id>
+    <link href="http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/"/>
+    <id>http://septimuszhu.github.io/2017/04/06/functional-programming-in-scala-tips/</id>
     <published>2017-04-06T06:38:54.000Z</published>
     <updated>2019-01-02T08:05:14.111Z</updated>
     
@@ -209,17 +209,17 @@
     
     </summary>
     
-      <category term="Scala" scheme="http://septimus.ml/categories/Scala/"/>
+      <category term="Scala" scheme="http://septimuszhu.github.io/categories/Scala/"/>
     
     
-      <category term="Scala" scheme="http://septimus.ml/tags/Scala/"/>
+      <category term="Scala" scheme="http://septimuszhu.github.io/tags/Scala/"/>
     
   </entry>
   
   <entry>
     <title>Libprocess concepts</title>
-    <link href="http://septimus.ml/2017/03/29/libprocess-tips/"/>
-    <id>http://septimus.ml/2017/03/29/libprocess-tips/</id>
+    <link href="http://septimuszhu.github.io/2017/03/29/libprocess-tips/"/>
+    <id>http://septimuszhu.github.io/2017/03/29/libprocess-tips/</id>
     <published>2017-03-29T06:38:54.000Z</published>
     <updated>2019-01-02T08:05:39.274Z</updated>
     
@@ -233,17 +233,17 @@
     
     </summary>
     
-      <category term="Mesos" scheme="http://septimus.ml/categories/Mesos/"/>
+      <category term="Mesos" scheme="http://septimuszhu.github.io/categories/Mesos/"/>
     
     
-      <category term="libprocess" scheme="http://septimus.ml/tags/libprocess/"/>
+      <category term="libprocess" scheme="http://septimuszhu.github.io/tags/libprocess/"/>
     
   </entry>
   
   <entry>
     <title>Mesos Containerizer</title>
-    <link href="http://septimus.ml/2017/03/24/mesos-containerizer-tips/"/>
-    <id>http://septimus.ml/2017/03/24/mesos-containerizer-tips/</id>
+    <link href="http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/"/>
+    <id>http://septimuszhu.github.io/2017/03/24/mesos-containerizer-tips/</id>
     <published>2017-03-24T06:38:54.000Z</published>
     <updated>2019-01-02T08:06:05.412Z</updated>
     
@@ -261,12 +261,12 @@
     
     </summary>
     
-      <category term="Mesos" scheme="http://septimus.ml/categories/Mesos/"/>
+      <category term="Mesos" scheme="http://septimuszhu.github.io/categories/Mesos/"/>
     
     
-      <category term="Mesos" scheme="http://septimus.ml/tags/Mesos/"/>
+      <category term="Mesos" scheme="http://septimuszhu.github.io/tags/Mesos/"/>
     
-      <category term="容器" scheme="http://septimus.ml/tags/%E5%AE%B9%E5%99%A8/"/>
+      <category term="容器" scheme="http://septimuszhu.github.io/tags/%E5%AE%B9%E5%99%A8/"/>
     
   </entry>
   
