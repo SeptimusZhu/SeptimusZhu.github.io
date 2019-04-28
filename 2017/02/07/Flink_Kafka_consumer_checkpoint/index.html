@@ -108,7 +108,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/SeptimusZhu/flink-related/master/pictures/kafka_consumer_checkpoint.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/SeptimusZhu/flink-related/master/pictures/checkpoint2.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/SeptimusZhu/flink-related/master/pictures/checkpointthreads.png">
-<meta property="og:updated_time" content="2019-04-28T07:48:04.719Z">
+<meta property="og:updated_time" content="2019-04-28T07:50:34.990Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flink Kafka consumer checkpoint机制">
 <meta name="twitter:description" content="基于Apache Flink 1.3  1 概述 Flink中Kafka consumer算子是有状态的，Kafka offset就是该算子的状态。consumer算子深度集成了Flink checkpoint机制，保证了exactly-once（一条消息被处理一次，区别于at-least-once和at-most-once）。">
@@ -489,7 +489,11 @@
 <p>Flink中Kafka consumer算子是有状态的，Kafka offset就是该算子的状态。consumer算子深度集成了Flink checkpoint机制，保证了exactly-once（一条消息被处理一次，区别于at-least-once和at-most-once）。</p>
 <a id="more"></a>
 <p><img src="https://raw.githubusercontent.com/SeptimusZhu/flink-related/master/pictures/checkpoint.PNG" alt=""></p>
-<p>checkpoint机制由Job Manager的<figure class="highlight plain"><figcaption><span>Manager会通知Task Manager，Task Manager收到通知后，异步执行所有StreamTask的快照，针对一个StreamTask，遍历所有operator，在operator上执行```snapshotState```并异步等待结果。当Job Manager的```CheckpointCoordinator```模块检测到checkpoint完成，会通知所有的Task Manager。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### offset提交策略</span><br><span class="line"></span><br><span class="line">开启checkpoint的情况下，不会自动向Kafka服务器提交offset确认请求，而是在Task Manager得到Job Manager下发的checkpoint完成通知后，通知所有算子任务，包括consumer算子，将完成checkpoint的offset提交回Kafka Server。</span><br><span class="line"></span><br><span class="line">在09版本Fetcher类```Kafka09Fetcher```构造方法中，有如下代码，根据是否开启checkpoint决定是否设置自动提交offset。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">// if checkpointing is enabled, we are not automatically committing to Kafka.</span><br><span class="line">kafkaProperties.setProperty(</span><br><span class="line">	ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,</span><br><span class="line">	Boolean.toString(!enableCheckpointing));</span><br></pre></td></tr></table></figure></p>
+<p>checkpoint机制由Job Manager的<code>CheckpointCoordinator</code>模块控制，用户可以配置checkpoint周期（与savepoint不同，savepoint由用户在用户代码中手动触发）。当触发一次checkpoint，Job Manager会通知Task Manager，Task Manager收到通知后，异步执行所有StreamTask的快照，针对一个StreamTask，遍历所有operator，在operator上执行<code>snapshotState</code>并异步等待结果。当Job Manager的<code>CheckpointCoordinator</code>模块检测到checkpoint完成，会通知所有的Task Manager。</p>
+<h4 id="offset提交策略">offset提交策略</h4>
+<p>开启checkpoint的情况下，不会自动向Kafka服务器提交offset确认请求，而是在Task Manager得到Job Manager下发的checkpoint完成通知后，通知所有算子任务，包括consumer算子，将完成checkpoint的offset提交回Kafka Server。</p>
+<p>在09版本Fetcher类<code>Kafka09Fetcher</code>构造方法中，有如下代码，根据是否开启checkpoint决定是否设置自动提交offset。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// if checkpointing is enabled, we are not automatically committing to Kafka.</span></span><br><span class="line">kafkaProperties.setProperty(</span><br><span class="line">	ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,</span><br><span class="line">	Boolean.toString(!enableCheckpointing));</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>注1：08老版本consumer算子的Fetcher中不存在此类代码，因08版本JM通知checkpoint完成后consumer算子将offset提交到zookeeper中保存，而09版本开始使用提交offset确认到Kafka服务器的策略实现checkpoint功能</p>
 </blockquote>
@@ -835,7 +839,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概述"><span class="nav-number">1.</span> <span class="nav-text">1 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-样例"><span class="nav-number">2.</span> <span class="nav-text">2 样例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-流程"><span class="nav-number">3.</span> <span class="nav-text">3 流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#正常流程"><span class="nav-number">3.0.1.</span> <span class="nav-text">正常流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#异常恢复流程"><span class="nav-number">3.0.2.</span> <span class="nav-text">异常恢复流程</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概述"><span class="nav-number">1.</span> <span class="nav-text">1 概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#offset提交策略"><span class="nav-number">1.0.1.</span> <span class="nav-text">offset提交策略</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-样例"><span class="nav-number">2.</span> <span class="nav-text">2 样例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-流程"><span class="nav-number">3.</span> <span class="nav-text">3 流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#正常流程"><span class="nav-number">3.0.1.</span> <span class="nav-text">正常流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#异常恢复流程"><span class="nav-number">3.0.2.</span> <span class="nav-text">异常恢复流程</span></a></li></ol></li></div>
             
 
           </div>
