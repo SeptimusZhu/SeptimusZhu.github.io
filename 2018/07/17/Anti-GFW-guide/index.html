@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="Cien años de soledad">
 <meta property="og:description" content="公司内网环境有美国代理，但Wi-Fi/4G环境是国内网络，使用Mac与手机时诸多不便，科学上网简要步骤记录如下">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-01-02T07:11:06.621Z">
+<meta property="og:updated_time" content="2019-04-28T07:34:44.775Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Anti GFW guide">
 <meta name="twitter:description" content="公司内网环境有美国代理，但Wi-Fi/4G环境是国内网络，使用Mac与手机时诸多不便，科学上网简要步骤记录如下">
@@ -481,15 +481,15 @@
 <a id="more"></a>
 <h4 id="ss服务器">ss服务器</h4>
 <p>购买vps或者ecs，国内外提供商都有，网上随便搜搜，各大云厂商有折扣就买，一个月几十块。
-我之前用的是华为云香港区的ecs，选centos系统，KeyPair登陆，绑上弹性IP，安全组开放TCP入方向443端口。</p>
+之前用的是华为云香港区的ecs，选centos系统，KeyPair登陆，绑上弹性IP，安全组开放TCP入方向443端口。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">easy_install pip</span><br><span class="line">yum install git</span><br><span class="line">pip install git+https://github.com/shadowsocks/shadowsocks.git@master</span><br><span class="line">ssserver -p 443 -k yourpswd -m aes-256-cfb --user nobody -d start</span><br></pre></td></tr></table></figure>
-<p>vultr有25+3=28刀优惠，最便宜的ipv4机器每个月3.5刀，相当于免费用8个月，注册链接<a href="https://www.vultr.com/promo25b?service=promo25b" target="_blank" rel="noopener">https://www.vultr.com/promo25b?service=promo25b</a></p>
+<p>vultr经常有推广活动，目前注册送50刀，注册链接<a href="https://www.vultr.com/?ref=7898253-4F" target="_blank" rel="noopener">https://www.vultr.com/?ref=7898253-4F</a></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install net-tools</span><br><span class="line">wget -N --no-check certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; ./ssr.sh</span><br><span class="line">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh</span><br></pre></td></tr></table></figure>
 <h4 id="ss客户端">ss客户端</h4>
 <ul>
 <li>
 <p>iPhone
-我手机没越狱，在闲鱼买了个香港或者美国appleid，下载shadowrocket、kite、openwingy等软件，配置服务器ip密码加密方式即可</p>
+手机没越狱，在闲鱼买了个香港或者美国appleid，下载shadowrocket、kite、openwingy等软件，配置服务器ip密码加密方式即可</p>
 </li>
 <li>
 <p>MacBook 网页
@@ -501,6 +501,7 @@ shadowsocks官网下载客户端（需先用vpn软件翻墙）shadowsocksX/shado
 </li>
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alias proxy='export all_proxy=socks5://127.0.0.1:1080'</span><br><span class="line">alias unproxy='unset all_proxy'</span><br><span class="line">export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=8118"</span><br></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -649,7 +650,7 @@ shadowsocks官网下载客户端（需先用vpn软件翻墙）shadowsocksX/shado
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -711,7 +712,9 @@ shadowsocks官网下载客户端（需先用vpn软件翻墙）shadowsocksX/shado
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>

@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://septimuszhu.github.io/2018/07/17/Anti-GFW-guide/</loc>
+    
+    <lastmod>2019-04-28T07:34:44.775Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://septimuszhu.github.io/2017/02/07/Flink_Kafka_consumer_checkpoint/</loc>
+    
+    <lastmod>2019-04-28T07:30:25.611Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://septimuszhu.github.io/about/index.html</loc>
     
     <lastmod>2019-02-02T05:53:51.194Z</lastmod>
@@ -68,13 +82,6 @@
     <loc>http://septimuszhu.github.io/2017/04/12/deploy-flink-on-mesos-marathon/</loc>
     
     <lastmod>2019-01-02T07:11:06.622Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://septimuszhu.github.io/2018/07/17/Anti-GFW-guide/</loc>
-    
-    <lastmod>2019-01-02T07:11:06.621Z</lastmod>
     
   </url>
   

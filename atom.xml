@@ -78,9 +78,9 @@
     <link href="http://septimuszhu.github.io/2018/07/17/Anti-GFW-guide/"/>
     <id>http://septimuszhu.github.io/2018/07/17/Anti-GFW-guide/</id>
     <published>2018-07-17T06:38:54.000Z</published>
-    <updated>2019-01-02T07:11:06.621Z</updated>
+    <updated>2019-04-28T07:34:44.775Z</updated>
     
-    <content type="html"><![CDATA[<p>公司内网环境有美国代理，但Wi-Fi/4G环境是国内网络，使用Mac与手机时诸多不便，科学上网简要步骤记录如下</p><a id="more"></a><h4 id="ss服务器">ss服务器</h4><p>购买vps或者ecs，国内外提供商都有，网上随便搜搜，各大云厂商有折扣就买，一个月几十块。我之前用的是华为云香港区的ecs，选centos系统，KeyPair登陆，绑上弹性IP，安全组开放TCP入方向443端口。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">easy_install pip</span><br><span class="line">yum install git</span><br><span class="line">pip install git+https://github.com/shadowsocks/shadowsocks.git@master</span><br><span class="line">ssserver -p 443 -k yourpswd -m aes-256-cfb --user nobody -d start</span><br></pre></td></tr></table></figure><p>vultr有25+3=28刀优惠，最便宜的ipv4机器每个月3.5刀，相当于免费用8个月，注册链接<a href="https://www.vultr.com/promo25b?service=promo25b" target="_blank" rel="noopener">https://www.vultr.com/promo25b?service=promo25b</a></p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install net-tools</span><br><span class="line">wget -N --no-check certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; ./ssr.sh</span><br><span class="line">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh</span><br></pre></td></tr></table></figure><h4 id="ss客户端">ss客户端</h4><ul><li><p>iPhone我手机没越狱，在闲鱼买了个香港或者美国appleid，下载shadowrocket、kite、openwingy等软件，配置服务器ip密码加密方式即可</p></li><li><p>MacBook 网页shadowsocks官网下载客户端（需先用vpn软件翻墙）shadowsocksX/shadowsocksX-NG，安装后配置与iPhone类似</p></li><li><p>MacBook 终端终端默认无法使用http代理，使用brew、sbt、git等命令时特别慢，需要安装privoxy（shadowsocksX-NG自带），在shell的rc脚本中配置（~/.zshrc)</p></li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alias proxy='export all_proxy=socks5://127.0.0.1:1080'</span><br><span class="line">alias unproxy='unset all_proxy'</span><br><span class="line">export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=8118"</span><br></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<p>公司内网环境有美国代理，但Wi-Fi/4G环境是国内网络，使用Mac与手机时诸多不便，科学上网简要步骤记录如下</p><a id="more"></a><h4 id="ss服务器">ss服务器</h4><p>购买vps或者ecs，国内外提供商都有，网上随便搜搜，各大云厂商有折扣就买，一个月几十块。之前用的是华为云香港区的ecs，选centos系统，KeyPair登陆，绑上弹性IP，安全组开放TCP入方向443端口。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">easy_install pip</span><br><span class="line">yum install git</span><br><span class="line">pip install git+https://github.com/shadowsocks/shadowsocks.git@master</span><br><span class="line">ssserver -p 443 -k yourpswd -m aes-256-cfb --user nobody -d start</span><br></pre></td></tr></table></figure><p>vultr经常有推广活动，目前注册送50刀，注册链接<a href="https://www.vultr.com/?ref=7898253-4F" target="_blank" rel="noopener">https://www.vultr.com/?ref=7898253-4F</a></p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install net-tools</span><br><span class="line">wget -N --no-check certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; ./ssr.sh</span><br><span class="line">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh</span><br></pre></td></tr></table></figure><h4 id="ss客户端">ss客户端</h4><ul><li><p>iPhone手机没越狱，在闲鱼买了个香港或者美国appleid，下载shadowrocket、kite、openwingy等软件，配置服务器ip密码加密方式即可</p></li><li><p>MacBook 网页shadowsocks官网下载客户端（需先用vpn软件翻墙）shadowsocksX/shadowsocksX-NG，安装后配置与iPhone类似</p></li><li><p>MacBook 终端终端默认无法使用http代理，使用brew、sbt、git等命令时特别慢，需要安装privoxy（shadowsocksX-NG自带），在shell的rc脚本中配置（~/.zshrc)</p></li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alias proxy='export all_proxy=socks5://127.0.0.1:1080'</span><br><span class="line">alias unproxy='unset all_proxy'</span><br><span class="line">export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=8118"</span><br></pre></td></tr></table></figure>]]></content>
     
     <summary type="html">
     
@@ -149,11 +149,11 @@
       <category term="Flink" scheme="http://septimuszhu.github.io/categories/Flink/"/>
     
     
+      <category term="Flink" scheme="http://septimuszhu.github.io/tags/Flink/"/>
+    
       <category term="Mesos" scheme="http://septimuszhu.github.io/tags/Mesos/"/>
     
       <category term="Marathon" scheme="http://septimuszhu.github.io/tags/Marathon/"/>
-    
-      <category term="Flink" scheme="http://septimuszhu.github.io/tags/Flink/"/>
     
   </entry>
   
@@ -179,11 +179,11 @@
       <category term="Flink" scheme="http://septimuszhu.github.io/categories/Flink/"/>
     
     
+      <category term="Flink" scheme="http://septimuszhu.github.io/tags/Flink/"/>
+    
       <category term="Mesos" scheme="http://septimuszhu.github.io/tags/Mesos/"/>
     
       <category term="Marathon" scheme="http://septimuszhu.github.io/tags/Marathon/"/>
-    
-      <category term="Flink" scheme="http://septimuszhu.github.io/tags/Flink/"/>
     
   </entry>
   
@@ -267,6 +267,37 @@
       <category term="Mesos" scheme="http://septimuszhu.github.io/tags/Mesos/"/>
     
       <category term="容器" scheme="http://septimuszhu.github.io/tags/%E5%AE%B9%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Flink Kafka consumer checkpoint机制</title>
+    <link href="http://septimuszhu.github.io/2017/02/07/Flink_Kafka_consumer_checkpoint/"/>
+    <id>http://septimuszhu.github.io/2017/02/07/Flink_Kafka_consumer_checkpoint/</id>
+    <published>2017-02-07T06:38:54.000Z</published>
+    <updated>2019-04-28T07:30:25.611Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>基于Apache Flink 1.3</p></blockquote><h2 id="1-概述">1 概述</h2><p>Flink中Kafka consumer算子是有状态的，Kafka offset就是该算子的状态。consumer算子深度集成了Flink checkpoint机制，保证了exactly-once（一条消息被处理一次，区别于at-least-once和at-most-once）。</p><p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/checkpoint.PNG" alt=""></p><p>checkpoint机制由Job Manager的<figure class="highlight plain"><figcaption><span>Manager会通知Task Manager，Task Manager收到通知后，异步执行所有StreamTask的快照，针对一个StreamTask，遍历所有operator，在operator上执行```snapshotState```并异步等待结果。当Job Manager的```CheckpointCoordinator```模块检测到checkpoint完成，会通知所有的Task Manager。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### offset提交策略</span><br><span class="line"></span><br><span class="line">开启checkpoint的情况下，不会自动向Kafka服务器提交offset确认请求，而是在Task Manager得到Job Manager下发的checkpoint完成通知后，通知所有算子任务，包括consumer算子，将完成checkpoint的offset提交回Kafka Server。</span><br><span class="line"></span><br><span class="line">在09版本Fetcher类```Kafka09Fetcher```构造方法中，有如下代码，根据是否开启checkpoint决定是否设置自动提交offset。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">// if checkpointing is enabled, we are not automatically committing to Kafka.</span><br><span class="line">kafkaProperties.setProperty(</span><br><span class="line">ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,</span><br><span class="line">Boolean.toString(!enableCheckpointing));</span><br></pre></td></tr></table></figure></p><blockquote><p>注1：08老版本consumer算子的Fetcher中不存在此类代码，因08版本JM通知checkpoint完成后consumer算子将offset提交到zookeeper中保存，而09版本开始使用提交offset确认到Kafka服务器的策略实现checkpoint功能</p></blockquote><blockquote><p>注2：enable.auto.commit运行参数配置项在09之后的Flink kafka consumer应用中无效，无论是否配置了checkpoint</p></blockquote><p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/kafka_consumer_checkpoint.png" alt=""></p><h2 id="2-样例">2 样例</h2><p>开启checkpoint功能，需要在Flink的Kafka应用代码中加入如下代码：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//配置checkpoint间隔</span></span><br><span class="line">env.getCheckpointConfig().setCheckpointInterval(<span class="number">15000</span>);</span><br><span class="line"><span class="comment">//配置statebackend</span></span><br><span class="line">env.setStateBackend(<span class="keyword">new</span> FsStateBackend(<span class="string">"file:////tmp/backend"</span>));</span><br></pre></td></tr></table></figure><p>为了直观说明checkpoint功能，编写测试代码如下，使用抛异常方式模拟流应用异常，当进入的事件数超过7个时流应用抛异常重启：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReadFromKafka</span> </span>&#123;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">env.setParallelism(<span class="number">1</span>);</span><br><span class="line">    env.getCheckpointConfig().setCheckpointInterval(<span class="number">15000</span>);</span><br><span class="line">    env.setStateBackend(<span class="keyword">new</span> FsStateBackend(<span class="string">"file:////tmp/backend"</span>));</span><br><span class="line">ParameterTool parameterTool = ParameterTool.fromArgs(args);</span><br><span class="line">DataStream&lt;String&gt; messageStream = env.addSource(<span class="keyword">new</span> FlinkKafkaConsumer010&lt;&gt;(</span><br><span class="line">    parameterTool.getRequired(<span class="string">"topic"</span>), <span class="keyword">new</span> SimpleStringSchema(),</span><br><span class="line">          parameterTool.getProperties()));</span><br><span class="line"></span><br><span class="line">messageStream.rebalance().map(<span class="keyword">new</span> MapFunction&lt;String, String&gt;() &#123;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">map</span><span class="params">(String s)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"><span class="keyword">if</span> (count++ == <span class="number">7</span>) &#123;</span><br><span class="line">count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"Failed."</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br><span class="line">&#125;).print();</span><br><span class="line"></span><br><span class="line">env.execute();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>如下图所示，Kafka消息按如下时间点依次进入Kafka Consumer：</p><p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/checkpoint2.png" alt=""></p><p>当partition 1的offset 5的消息进入Flink，进入测试代码中的异常分支，流应用重启后，重新向Kafka订阅消息，会从最近保存的checkpoint点的offset开始消费，在此例中，最终print结果中，只有partition 1 offset 4和partition 2 offset 3这两条消息会打印两次（partition之间消息不保序，同partition内保序），第二次异常分支由partition 1 offset 7的消息触发，因其为最近checkpoint后的第一条消息，因此流应用重启后继续从此开始消费。</p><h2 id="3-流程">3 流程</h2><p>以下分别说明正常的checkpoint流程和异常的恢复流程</p><h4 id="正常流程">正常流程</h4><p>下图为从Task Manager收到Job Manager的checkpoint消息后Flink Kafka Consumer算子一次完整checkpoint过程的线程时序图：</p><p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/checkpointthreads.png" alt=""></p><blockquote><p>注：正常的checkpoint流程不涉及Consumer算子主线程。</p></blockquote><h4 id="异常恢复流程">异常恢复流程</h4><p>Consumer算子初始化时，在<code>FlinkKafkaConsumerBase.initializeState()</code>方法中，会调用<code>OperatorStateStore.getSerializableListState</code>尝试从statebackend中获取最近一次checkpoint保存的offset信息，并将其保存在<code>restoreToOffset</code>中，当Consumer算子主线程开始运行时（<code>FlinkKafkaConsumerBase.run()</code>)，先尝试从<code>restoreToOffset</code>中获取offset，并保存到Consumer算子主线程和Kafka Consumer线程共有的partition集合引用中，从而Kafka Consumer线程可以从该checkpoint指定的partition offset中开始消费消息。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;p&gt;基于Apache Flink 1.3&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;1-概述&quot;&gt;1 概述&lt;/h2&gt;
+&lt;p&gt;Flink中Kafka consumer算子是有状态的，Kafka offset就是该算子的状态。consumer算子深
+      
+    
+    </summary>
+    
+      <category term="Flink" scheme="http://septimuszhu.github.io/categories/Flink/"/>
+    
+    
+      <category term="Flink" scheme="http://septimuszhu.github.io/tags/Flink/"/>
+    
+      <category term="Kafka" scheme="http://septimuszhu.github.io/tags/Kafka/"/>
     
   </entry>
   

@@ -27,7 +27,7 @@
   <entry>
     <title><![CDATA[Anti GFW guide]]></title>
     <url>%2F2018%2F07%2F17%2FAnti-GFW-guide%2F</url>
-    <content type="text"><![CDATA[公司内网环境有美国代理，但Wi-Fi/4G环境是国内网络，使用Mac与手机时诸多不便，科学上网简要步骤记录如下 ss服务器 购买vps或者ecs，国内外提供商都有，网上随便搜搜，各大云厂商有折扣就买，一个月几十块。 我之前用的是华为云香港区的ecs，选centos系统，KeyPair登陆，绑上弹性IP，安全组开放TCP入方向443端口。 1234easy_install pipyum install gitpip install git+https://github.com/shadowsocks/shadowsocks.git@masterssserver -p 443 -k yourpswd -m aes-256-cfb --user nobody -d start vultr有25+3=28刀优惠，最便宜的ipv4机器每个月3.5刀，相当于免费用8个月，注册链接https://www.vultr.com/promo25b?service=promo25b 123yum install net-toolswget -N --no-check certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; ./ssr.shwget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh ss客户端 iPhone 我手机没越狱，在闲鱼买了个香港或者美国appleid，下载shadowrocket、kite、openwingy等软件，配置服务器ip密码加密方式即可 MacBook 网页 shadowsocks官网下载客户端（需先用vpn软件翻墙）shadowsocksX/shadowsocksX-NG，安装后配置与iPhone类似 MacBook 终端 终端默认无法使用http代理，使用brew、sbt、git等命令时特别慢，需要安装privoxy（shadowsocksX-NG自带），在shell的rc脚本中配置（~/.zshrc) 123alias proxy='export all_proxy=socks5://127.0.0.1:1080'alias unproxy='unset all_proxy'export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=8118"]]></content>
+    <content type="text"><![CDATA[公司内网环境有美国代理，但Wi-Fi/4G环境是国内网络，使用Mac与手机时诸多不便，科学上网简要步骤记录如下 ss服务器 购买vps或者ecs，国内外提供商都有，网上随便搜搜，各大云厂商有折扣就买，一个月几十块。 之前用的是华为云香港区的ecs，选centos系统，KeyPair登陆，绑上弹性IP，安全组开放TCP入方向443端口。 1234easy_install pipyum install gitpip install git+https://github.com/shadowsocks/shadowsocks.git@masterssserver -p 443 -k yourpswd -m aes-256-cfb --user nobody -d start vultr经常有推广活动，目前注册送50刀，注册链接https://www.vultr.com/?ref=7898253-4F 123yum install net-toolswget -N --no-check certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; ./ssr.shwget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh ss客户端 iPhone 手机没越狱，在闲鱼买了个香港或者美国appleid，下载shadowrocket、kite、openwingy等软件，配置服务器ip密码加密方式即可 MacBook 网页 shadowsocks官网下载客户端（需先用vpn软件翻墙）shadowsocksX/shadowsocksX-NG，安装后配置与iPhone类似 MacBook 终端 终端默认无法使用http代理，使用brew、sbt、git等命令时特别慢，需要安装privoxy（shadowsocksX-NG自带），在shell的rc脚本中配置（~/.zshrc) 123alias proxy='export all_proxy=socks5://127.0.0.1:1080'alias unproxy='unset all_proxy'export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=8118"]]></content>
       <categories>
         <category>科学上网</category>
       </categories>
@@ -57,9 +57,9 @@
         <category>Flink</category>
       </categories>
       <tags>
+        <tag>Flink</tag>
         <tag>Mesos</tag>
         <tag>Marathon</tag>
-        <tag>Flink</tag>
       </tags>
   </entry>
   <entry>
@@ -70,9 +70,9 @@
         <category>Flink</category>
       </categories>
       <tags>
+        <tag>Flink</tag>
         <tag>Mesos</tag>
         <tag>Marathon</tag>
-        <tag>Flink</tag>
       </tags>
   </entry>
   <entry>
@@ -107,6 +107,18 @@
       <tags>
         <tag>Mesos</tag>
         <tag>容器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Flink Kafka consumer checkpoint机制]]></title>
+    <url>%2F2017%2F02%2F07%2FFlink_Kafka_consumer_checkpoint%2F</url>
+    <content type="text"><![CDATA[基于Apache Flink 1.3 1 概述 Flink中Kafka consumer算子是有状态的，Kafka offset就是该算子的状态。consumer算子深度集成了Flink checkpoint机制，保证了exactly-once（一条消息被处理一次，区别于at-least-once和at-most-once）。 checkpoint机制由Job Manager的Manager会通知Task Manager，Task Manager收到通知后，异步执行所有StreamTask的快照，针对一个StreamTask，遍历所有operator，在operator上执行```snapshotState```并异步等待结果。当Job Manager的```CheckpointCoordinator```模块检测到checkpoint完成，会通知所有的Task Manager。123456789101112#### offset提交策略开启checkpoint的情况下，不会自动向Kafka服务器提交offset确认请求，而是在Task Manager得到Job Manager下发的checkpoint完成通知后，通知所有算子任务，包括consumer算子，将完成checkpoint的offset提交回Kafka Server。在09版本Fetcher类```Kafka09Fetcher```构造方法中，有如下代码，根据是否开启checkpoint决定是否设置自动提交offset。```java// if checkpointing is enabled, we are not automatically committing to Kafka.kafkaProperties.setProperty( ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, Boolean.toString(!enableCheckpointing)); 注1：08老版本consumer算子的Fetcher中不存在此类代码，因08版本JM通知checkpoint完成后consumer算子将offset提交到zookeeper中保存，而09版本开始使用提交offset确认到Kafka服务器的策略实现checkpoint功能 注2：enable.auto.commit运行参数配置项在09之后的Flink kafka consumer应用中无效，无论是否配置了checkpoint 2 样例 开启checkpoint功能，需要在Flink的Kafka应用代码中加入如下代码： 1234//配置checkpoint间隔env.getCheckpointConfig().setCheckpointInterval(15000);//配置statebackendenv.setStateBackend(new FsStateBackend("file:////tmp/backend")); 为了直观说明checkpoint功能，编写测试代码如下，使用抛异常方式模拟流应用异常，当进入的事件数超过7个时流应用抛异常重启： 123456789101112131415161718192021222324252627public class ReadFromKafka &#123; static int count = 0; public static void main(String[] args) throws Exception &#123; StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(); env.setParallelism(1); env.getCheckpointConfig().setCheckpointInterval(15000); env.setStateBackend(new FsStateBackend("file:////tmp/backend")); ParameterTool parameterTool = ParameterTool.fromArgs(args); DataStream&lt;String&gt; messageStream = env.addSource(new FlinkKafkaConsumer010&lt;&gt;( parameterTool.getRequired("topic"), new SimpleStringSchema(), parameterTool.getProperties())); messageStream.rebalance().map(new MapFunction&lt;String, String&gt;() &#123; @Override public String map(String s) throws Exception &#123; if (count++ == 7) &#123; count = 0; throw new Exception("Failed."); &#125; return s; &#125; &#125;).print(); env.execute(); &#125;&#125; 如下图所示，Kafka消息按如下时间点依次进入Kafka Consumer： 当partition 1的offset 5的消息进入Flink，进入测试代码中的异常分支，流应用重启后，重新向Kafka订阅消息，会从最近保存的checkpoint点的offset开始消费，在此例中，最终print结果中，只有partition 1 offset 4和partition 2 offset 3这两条消息会打印两次（partition之间消息不保序，同partition内保序），第二次异常分支由partition 1 offset 7的消息触发，因其为最近checkpoint后的第一条消息，因此流应用重启后继续从此开始消费。 3 流程 以下分别说明正常的checkpoint流程和异常的恢复流程 正常流程 下图为从Task Manager收到Job Manager的checkpoint消息后Flink Kafka Consumer算子一次完整checkpoint过程的线程时序图： 注：正常的checkpoint流程不涉及Consumer算子主线程。 异常恢复流程 Consumer算子初始化时，在FlinkKafkaConsumerBase.initializeState()方法中，会调用OperatorStateStore.getSerializableListState尝试从statebackend中获取最近一次checkpoint保存的offset信息，并将其保存在restoreToOffset中，当Consumer算子主线程开始运行时（FlinkKafkaConsumerBase.run())，先尝试从restoreToOffset中获取offset，并保存到Consumer算子主线程和Kafka Consumer线程共有的partition集合引用中，从而Kafka Consumer线程可以从该checkpoint指定的partition offset中开始消费消息。]]></content>
+      <categories>
+        <category>Flink</category>
+      </categories>
+      <tags>
+        <tag>Flink</tag>
+        <tag>Kafka</tag>
       </tags>
   </entry>
 </search>
