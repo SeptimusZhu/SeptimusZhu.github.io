@@ -1959,41 +1959,20 @@
 
       
         
-          
-            <blockquote>
+          <blockquote>
 <p>基于Apache Flink 1.3</p>
 </blockquote>
 <h2 id="1-概述">1 概述</h2>
 <p>Flink中Kafka consumer算子是有状态的，Kafka offset就是该算子的状态。consumer算子深度集成了Flink checkpoint机制，保证了exactly-once（一条消息被处理一次，区别于at-least-once和at-most-once）。</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/checkpoint.PNG" alt=""></p>
-<p>checkpoint机制由Job Manager的<figure class="highlight plain"><figcaption><span>Manager会通知Task Manager，Task Manager收到通知后，异步执行所有StreamTask的快照，针对一个StreamTask，遍历所有operator，在operator上执行```snapshotState```并异步等待结果。当Job Manager的```CheckpointCoordinator```模块检测到checkpoint完成，会通知所有的Task Manager。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### offset提交策略</span><br><span class="line"></span><br><span class="line">开启checkpoint的情况下，不会自动向Kafka服务器提交offset确认请求，而是在Task Manager得到Job Manager下发的checkpoint完成通知后，通知所有算子任务，包括consumer算子，将完成checkpoint的offset提交回Kafka Server。</span><br><span class="line"></span><br><span class="line">在09版本Fetcher类```Kafka09Fetcher```构造方法中，有如下代码，根据是否开启checkpoint决定是否设置自动提交offset。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">// if checkpointing is enabled, we are not automatically committing to Kafka.</span><br><span class="line">kafkaProperties.setProperty(</span><br><span class="line">	ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,</span><br><span class="line">	Boolean.toString(!enableCheckpointing));</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>注1：08老版本consumer算子的Fetcher中不存在此类代码，因08版本JM通知checkpoint完成后consumer算子将offset提交到zookeeper中保存，而09版本开始使用提交offset确认到Kafka服务器的策略实现checkpoint功能</p>
-</blockquote>
-<blockquote>
-<p>注2：enable.auto.commit运行参数配置项在09之后的Flink kafka consumer应用中无效，无论是否配置了checkpoint</p>
-</blockquote>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/kafka_consumer_checkpoint.png" alt=""></p>
-<h2 id="2-样例">2 样例</h2>
-<p>开启checkpoint功能，需要在Flink的Kafka应用代码中加入如下代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//配置checkpoint间隔</span></span><br><span class="line">env.getCheckpointConfig().setCheckpointInterval(<span class="number">15000</span>);</span><br><span class="line"><span class="comment">//配置statebackend</span></span><br><span class="line">env.setStateBackend(<span class="keyword">new</span> FsStateBackend(<span class="string">"file:////tmp/backend"</span>));</span><br></pre></td></tr></table></figure>
-<p>为了直观说明checkpoint功能，编写测试代码如下，使用抛异常方式模拟流应用异常，当进入的事件数超过7个时流应用抛异常重启：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReadFromKafka</span> </span>&#123;</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">		env.setParallelism(<span class="number">1</span>);</span><br><span class="line">    	env.getCheckpointConfig().setCheckpointInterval(<span class="number">15000</span>);</span><br><span class="line">    	env.setStateBackend(<span class="keyword">new</span> FsStateBackend(<span class="string">"file:////tmp/backend"</span>));</span><br><span class="line">		ParameterTool parameterTool = ParameterTool.fromArgs(args);</span><br><span class="line">		DataStream&lt;String&gt; messageStream = env.addSource(<span class="keyword">new</span> FlinkKafkaConsumer010&lt;&gt;(</span><br><span class="line">		    parameterTool.getRequired(<span class="string">"topic"</span>), <span class="keyword">new</span> SimpleStringSchema(),</span><br><span class="line">          	parameterTool.getProperties()));</span><br><span class="line"></span><br><span class="line">		messageStream.rebalance().map(<span class="keyword">new</span> MapFunction&lt;String, String&gt;() &#123;</span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> String <span class="title">map</span><span class="params">(String s)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				<span class="keyword">if</span> (count++ == <span class="number">7</span>) &#123;</span><br><span class="line">					count = <span class="number">0</span>;</span><br><span class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"Failed."</span>);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">return</span> s;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;).print();</span><br><span class="line"></span><br><span class="line">		env.execute();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如下图所示，Kafka消息按如下时间点依次进入Kafka Consumer：</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/checkpoint2.png" alt=""></p>
-<p>当partition 1的offset 5的消息进入Flink，进入测试代码中的异常分支，流应用重启后，重新向Kafka订阅消息，会从最近保存的checkpoint点的offset开始消费，在此例中，最终print结果中，只有partition 1 offset 4和partition 2 offset 3这两条消息会打印两次（partition之间消息不保序，同partition内保序），第二次异常分支由partition 1 offset 7的消息触发，因其为最近checkpoint后的第一条消息，因此流应用重启后继续从此开始消费。</p>
-<h2 id="3-流程">3 流程</h2>
-<p>以下分别说明正常的checkpoint流程和异常的恢复流程</p>
-<h4 id="正常流程">正常流程</h4>
-<p>下图为从Task Manager收到Job Manager的checkpoint消息后Flink Kafka Consumer算子一次完整checkpoint过程的线程时序图：</p>
-<p><img src="https://github.com/SeptimusZhu/flink-related/blob/master/pictures/checkpointthreads.png" alt=""></p>
-<blockquote>
-<p>注：正常的checkpoint流程不涉及Consumer算子主线程。</p>
-</blockquote>
-<h4 id="异常恢复流程">异常恢复流程</h4>
-<p>Consumer算子初始化时，在<code>FlinkKafkaConsumerBase.initializeState()</code>方法中，会调用<code>OperatorStateStore.getSerializableListState</code>尝试从statebackend中获取最近一次checkpoint保存的offset信息，并将其保存在<code>restoreToOffset</code>中，当Consumer算子主线程开始运行时（<code>FlinkKafkaConsumerBase.run()</code>)，先尝试从<code>restoreToOffset</code>中获取offset，并保存到Consumer算子主线程和Kafka Consumer线程共有的partition集合引用中，从而Kafka Consumer线程可以从该checkpoint指定的partition offset中开始消费消息。</p>
-
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2017/02/07/Flink_Kafka_consumer_checkpoint/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
