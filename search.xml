@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[多用户vnc访问方法]]></title>
+    <url>%2F2020%2F04%2F30%2Fvnc%2F</url>
+    <content type="text"><![CDATA[在工作中经常遇到多个人同时使用一台机器同一个软件的情况，软件带有GUI，需要使用GPU，且因端口冲突，无法同时打开。使用docker封装和display映射，实现多用户共享的方法记录如下。 准备工作 创建linux用户 1useradd -m user_a -d /home/user_a --shell /bin/bash 登陆用户账号并启动vnc 1startx 查询displayname 1ps -aux | grep xinit 启动vnc 1x11vnc -display displayname -rfbport port_not_used -forever -capslock -nomodtweak -shared 启动 使用vnc viewer或者类似软件连接vnc，打开终端并输入 1xhost + 运行软件，docker镜像构建构建不在此说明 1docker run -it --runtime=nvidia --privileged --mac-address=xx:xx:xx:xx:xx:xx -v /software_path:/root -v /tmp.X11-unix:/tmp/.X11-unix -v /usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu -e DISPLAY=$DISPLAY -p port_not_used:port_of_software registry.xx.xx/xx:1.0 /bin/bash]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>vnc</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[驾驶行为分析]]></title>
     <url>%2F2019%2F01%2F28%2Fdriver-behavior-analysis%2F</url>
     <content type="text"><![CDATA[概述 通过车载设备、用户手机和穿戴设备的传感器，获取车辆和驾驶员相关数据，通过数据分析模型和大数据实时计算等手段，对驾驶行为和驾驶技术进行实时监测和智能评估，对于交通事故减少、驾驶技术提升，以及UBI定价等方面，都有重要的参考价值。从社会环境和经济价值上看，降低行车事故发生率，降低车辆保费和燃油成本，这些方面都是积极正面的。 相关方分析 车厂 通过IVI、TBOX、C-Link、OBD、ADAS等终端数据采集并上传云端分析，使汽车具备实时驾驶行为分析与安全行车提示、精确燃油经济性分析、节能驾驶指导等功能。为车厂提供车联网大数据服务，提升用户对产品更省油、更安全的品牌认知。 保险 通过精准的驾驶行为分析，将车主数据从原始的理赔数据向驾驶数据迁移拓展，为保险公司提供新的保费计算参数，助力保险公司重构精算模型，降低理赔风险，提高车险盈利，增强用户粘性。 车队 驾驶行为分析为车队员工的绩效及工作质量管理提供新的方式，促进车队盈利能力提升，员工驾驶技术提升，降低车队的保费支出。 个人 通过手机和穿戴设备传感器的数据采集，获取车辆行驶状态和驾驶员状态，包括车辆速度、加速度、驾驶员心率和心律状态、语言情感状态等信息，通过多种手段，包括分析车辆状态、驾驶员情绪（愤怒和极度悲伤时心率快且心律不稳）、NLP情感分析（sentiment analysis）等对个人驾驶行为进行多维度个性化分析，引导驾驶人改善驾驶行为，降低行车风险。 危险驾驶行为 行为 说明 标准 急加速（Harsh acceleration） 一级加速：每秒时速差&gt;10KM/h；二级加速：&gt;8KM/h; 三级加速：&gt;6KM/h，持续2秒以上 急减速（Harsh braking） 一级减速：每秒时速差&gt;10KM/h；二级减速：&gt;8KM/h; 三级减速：&gt;6KM/h，持续2秒以上 频繁刹车（Frequent braking） 超速行驶（Speeding） 一级超速：超过道路限速50%以上；二级超速：超过20%以上；三级超速：超过10%以上 高速转弯（Harsh high speed turning） 车辆重心高低影响不同转弯角度下最大转弯车速 慢速行驶（Slow driving） 行驶速度低于道路最低限速，常见于高速道路 频繁停车（Frequent stopping） 疲劳驾驶（Fatigued driving） 通过穿戴设备CPC（ CardioPulmonary Coupling心肺耦合图谱）分析，达到类似EEG（ Electroencephalogram脑电波）分析的效果，判断驾驶员疲劳程度 车辆检测方法 急加减速、超速/慢速行驶 周期性采集车辆经纬度，从地图信息中获取车辆位置所在路段限速，在给定时间窗内判断急加减速和超速/慢速行驶行为次数。 疲劳驾驶检测 传统的基于车辆行为的疲劳驾驶检测较为简单，主要通过驾驶时间、方向盘转动频率、踩刹车和油门的频率等方式，另外，可借助前置摄像头，检测前方道路状况的单调性，间接估计驾驶员疲劳程度。此类方法通常精度不高，且欠缺灵敏度。 驾驶员检测方法 生理状态检测 目前在穿戴设备可检测的生理状态包括心率、心律和心电信号。心率和心律会反应一个人的生理情况和情绪情况，例如驾驶员瞌睡时，心率下降心律稳定；当愤怒或者悲伤时，心率提高心律不稳等等。甚至可以通过某些穿戴设备的CPC分析功能，提供更详细精确的生理状况分析。 面部图像识别 通过采集驾驶员面部特征变化来判断疲劳，主要包括瞳孔大小、眨眼频率、眼睛转动速度、眼睛闭合度、闭眼时间占比等等，通过简单的逻辑回归算法或者复杂的卷积神经网络（CNN），都可以做到判断驾驶员是否疲劳。缺点是需要较多的训练数据，而且摄像头对准驾驶员脸部会给驾驶员带来心理不适感。 语音识别(speech recognition)和情感分析(sentiment analysis) 具有危险驾驶行为的驾驶员通常伴随着严重的路怒症的，并且不吐不快，不骂不爽。通过对驾驶员的说话语音识别和情感分析，可以获知当前驾驶员的情绪状态。通过递归神经网络（RNN）和迁移学习（transfer learning）等手段，检测驾驶员情绪状态。 总结 驾驶行为分析包含多种行为内容和检测手段，根据使用场景的不同，以及硬件条件的不同，各种行为内容会有不同的权重，最终的驾驶行为打分可能根据不同的驾驶行为以线性函数(linear function)方式展示，也有可能以高阶多项式函数（high-degree polynomial function）方式展示，并无标准的公式可供套用。]]></content>
