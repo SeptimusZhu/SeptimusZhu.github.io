@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[多用户vnc访问方法]]></title>
     <url>%2F2020%2F04%2F30%2Fvnc%2F</url>
-    <content type="text"><![CDATA[在工作中经常遇到多个人同时使用一台机器同一个软件的情况，软件带有GUI，需要使用GPU，且因端口冲突，无法同时打开。使用docker封装和display映射，实现多用户共享的方法记录如下。 准备工作 创建linux用户 1useradd -m user_a -d /home/user_a --shell /bin/bash 登陆用户账号并启动vnc 1startx 查询displayname 1ps -aux | grep xinit 启动vnc 1x11vnc -display displayname -rfbport port_not_used -forever -capslock -nomodtweak -shared 启动 使用vnc viewer或者类似软件连接vnc，打开终端并输入 1xhost + 运行软件，docker镜像构建构建不在此说明 1docker run -it --runtime=nvidia --privileged --mac-address=xx:xx:xx:xx:xx:xx -v /software_path:/root -v /tmp.X11-unix:/tmp/.X11-unix -v /usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu -e DISPLAY=$DISPLAY -p port_not_used:port_of_software registry.xx.xx/xx:1.0 /bin/bash]]></content>
+    <content type="text"><![CDATA[在工作中经常遇到多个人同时使用一台机器同一个软件的情况，软件带有GUI，需要使用GPU，且因端口冲突，无法同时打开。使用docker封装和display映射，实现多用户共享的方法记录如下。 准备工作 创建linux用户 1useradd -m user_a -d /home/user_a --shell /bin/bash 登陆用户账号并启动vnc 1startx 查询displayname 1ps -aux | grep xinit 启动vnc 1x11vnc -display displayname -rfbport port_not_used -forever -capslock -nomodtweak -nevershared -repeat -noxfixes -noxrecord -noxdamage 启动 使用vnc viewer或者类似软件连接vnc，打开终端并输入 1xhost + 运行软件，docker镜像构建构建不在此说明 1docker run -it --runtime=nvidia --privileged --mac-address=xx:xx:xx:xx:xx:xx -v /software_path:/root -v /tmp.X11-unix:/tmp/.X11-unix -v /usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu -e DISPLAY=$DISPLAY -p port_not_used:port_of_software registry.xx.xx/xx:1.0 /bin/bash]]></content>
       <categories>
         <category>linux</category>
       </categories>

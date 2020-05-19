@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="Cien años de soledad">
 <meta property="og:description" content="在工作中经常遇到多个人同时使用一台机器同一个软件的情况，软件带有GUI，需要使用GPU，且因端口冲突，无法同时打开。使用docker封装和display映射，实现多用户共享的方法记录如下。">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2020-05-05T09:00:44.158Z">
+<meta property="og:updated_time" content="2020-05-19T08:59:56.338Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="多用户vnc访问方法">
 <meta name="twitter:description" content="在工作中经常遇到多个人同时使用一台机器同一个软件的情况，软件带有GUI，需要使用GPU，且因端口冲突，无法同时打开。使用docker封装和display映射，实现多用户共享的方法记录如下。">
@@ -487,7 +487,7 @@
 <p>查询displayname</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -aux | grep xinit</span><br></pre></td></tr></table></figure>
 <p>启动vnc</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x11vnc -display displayname -rfbport port_not_used -forever -capslock -nomodtweak -shared</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x11vnc -display displayname -rfbport port_not_used -forever -capslock -nomodtweak -nevershared -repeat -noxfixes -noxrecord -noxdamage</span><br></pre></td></tr></table></figure>
 <h4 id="启动">启动</h4>
 <p>使用vnc viewer或者类似软件连接vnc，打开终端并输入</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xhost +</span><br></pre></td></tr></table></figure>
